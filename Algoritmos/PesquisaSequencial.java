@@ -1,5 +1,15 @@
 package Algoritmos;
 
+/* A pesquisa sequencial verifica o array posição por posição para encontrar um determinado elemento
+ * para isso, eu criei a função pesquisar para fazer tal verificação. Caso o elemento exista no array,
+ * a função retorna true, caso contrário false.
+ * 
+ * CUSTO COMPUTACINAL -
+ * No pior caso é Θ(n). Esse caso acontece quando o elemento procurado não existe ou está no fim do array.
+ * No melhor caso é Θ(1). Esse caso acontece quando o elemento está na primeira posição do array.
+ * Além disso, a operação relevante é a comparação entre os elementos do array.
+ */
+
 public class PesquisaSequencial {
 
     public static boolean pesquisar(int x, int[] valores) {
@@ -22,13 +32,3 @@ public class PesquisaSequencial {
         }
     }
 }
-
-/* A pesquisa sequencial verifica o array posição por posição para encontrar um determinado elemento
- * para isso, eu criei a função pesquisar para fazer tal verificação. Caso o elemento exista no array,
- * a função retorna true, caso contrário false.
- * 
- * CUSTO COMPUTACINAL -
- * No pior caso é Θ(n). Esse caso acontece quando o elemento procurado não existe ou está no fim do array.
- * No melhor caso é Θ(1). Esse caso acontece quando o elemento está na primeira posição do array.
- * Além disso, a operação relevante é a comparação entre os elementos do array.
- */

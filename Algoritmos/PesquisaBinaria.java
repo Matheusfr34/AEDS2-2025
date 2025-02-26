@@ -1,4 +1,14 @@
 package Algoritmos;
+
+/* A pesquisa binária faz uma busca sempre no meio do array e vai dividindo o escopo de busca pela metade 
+ * a cada iteração. Por esse motivo, acaba sendo um algoritmo de pesquisa eficiente, porém o array precisa
+ * estar ordenado para que ele funcione corretamente.
+ * CUSTO COMPUTACINAL -
+ * No pior caso é Θ(log n). Esse caso acontece quando o elemento procurado não existe ou está na última posição de procura.
+ * No melhor caso é Θ(1). Esse caso acontece quando o elemento está no meio do array, ou seja, onde se inicia a busca.
+ * Além disso, a operação relevante é a comparação entre os elementos do array.
+ */
+
 public class PesquisaBinaria {
 
     public static boolean pesquisar(int x, int[] valor) {
@@ -33,12 +43,3 @@ public class PesquisaBinaria {
 
     }
 }
-
-/* A pesquisa binária faz uma busca sempre no meio do array e vai dividindo o escopo de busca pela metade 
- * a cada iteração. Por esse motivo, acaba sendo um algoritmo de pesquisa eficiente, porém o array precisa
- * estar ordenado para que ele funcione corretamente.
- * CUSTO COMPUTACINAL -
- * No pior caso é Θ(log n). Esse caso acontece quando o elemento procurado não existe ou está na última posição de procura.
- * No melhor caso é Θ(1). Esse caso acontece quando o elemento está no meio do array, ou seja, onde se inicia a busca.
- * Além disso, a operação relevante é a comparação entre os elementos do array.
- */

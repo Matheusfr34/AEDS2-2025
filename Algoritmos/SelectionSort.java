@@ -3,7 +3,18 @@ package Algoritmos;
 /*
  * O selection sort sempre pega o menor elemento do array e coloca ele na posição correta. 
  * Dessa forma, ele sempre percorre todo o array. 
+ * 
+ * CUSTO COMPUTACIONAL:
+ * 
+ * VANTAGENS:
+ * O número de movimentações é linear e isso é interessante para uma grande quantidade de registros
+ * 
+ * DESVANTAGENS:
+ * 𝚯(n2) comparações
+ * Não há melhor caso, pois sempre percorre todo array
+ * Algoritmo não estável
  */
+
 public class SelectionSort {
 
     public static void ordenarCrescente(int[] array) {
