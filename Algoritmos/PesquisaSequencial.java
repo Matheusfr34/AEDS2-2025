@@ -1,3 +1,5 @@
+package Algoritmos;
+
 public class PesquisaSequencial {
 
     public static boolean pesquisar(int x, int[] valores) {
@@ -8,12 +10,12 @@ public class PesquisaSequencial {
                 break;
             }
         }
-        return false;
+        return resp;
     }
 
     public static void main(String[] args) {
         int valores[] = {2, 8, 3, 10, 15, 20};
-        if (pesquisar(4, valores)) {
+        if (pesquisar(3, valores)) {
             System.out.println("VALOR EXISTE NO ARRAY");
         } else {
             System.out.println("VALOR NÃO EXISTE NO ARRAY");
