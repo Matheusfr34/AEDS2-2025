@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Ciframento {
 
+    //Método utilizado para cifrar as palavras
     public static String cifrar(String fraseOriginal){
         char[] fraseCifrada = new char[fraseOriginal.length()];
 
@@ -12,10 +13,7 @@ public class Ciframento {
 
             if(caracterOriginal >= 32 && caracterOriginal <= 126){
                 char caracterCifrado = (char) (caracterOriginal + 3);
-                
-                if(caracterCifrado > 126){
-                    caracterCifrado = (char) (caracterCifrado - 95);
-                }
+
                 fraseCifrada[i] = caracterCifrado;
             } else {
                 fraseCifrada[i] = caracterOriginal;
@@ -25,8 +23,10 @@ public class Ciframento {
         return new String(fraseCifrada);
     }
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
+
         while(!flag){
             String palavra = sc.nextLine();
             if(palavra.charAt(0) == 'F' && palavra.charAt(1) == 'I' && palavra.charAt(2) == 'M'){
@@ -35,6 +35,7 @@ public class Ciframento {
             String palavraCifrada = cifrar(palavra);
             System.out.println(palavraCifrada);
         }
+
         sc.close();
     }
 }
