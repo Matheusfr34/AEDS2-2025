@@ -25,12 +25,11 @@ public class Ciframento {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        boolean flag = false;
 
-        while(!flag){
+        while(sc.hasNextLine()){
             String palavra = sc.nextLine();
             if(palavra.charAt(0) == 'F' && palavra.charAt(1) == 'I' && palavra.charAt(2) == 'M'){
-                flag = true;
+                break;
             }
             String palavraCifrada = cifrar(palavra);
             System.out.println(palavraCifrada);
