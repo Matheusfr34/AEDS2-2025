@@ -1,4 +1,4 @@
-package ex03;
+package TPs.TP01.ex03;
 
 import java.util.Scanner;
 
