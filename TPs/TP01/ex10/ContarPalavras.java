@@ -1,5 +1,3 @@
-//package TPs.TP01.ex10;
-
 import java.util.Scanner;
 
 public class ContarPalavras {

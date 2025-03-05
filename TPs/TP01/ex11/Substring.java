@@ -1,4 +1,3 @@
-//package TPs.TP01.ex11;
 import java.util.*;
 
 public class Substring {

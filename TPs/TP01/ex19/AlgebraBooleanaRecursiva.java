@@ -1,4 +1,3 @@
-package TPs.TP01.ex05;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

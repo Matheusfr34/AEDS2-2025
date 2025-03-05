@@ -1,5 +1,3 @@
-package TPs.TP01.ex01;
-
 import java.util.Scanner;
 public class Palindromo{
     public static boolean ehPalindromo(String texto){

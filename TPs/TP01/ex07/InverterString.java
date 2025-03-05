@@ -1,5 +1,3 @@
-//package TPs.TP01.ex07;
-
 import java.util.Scanner;
 
 public class InverterString {

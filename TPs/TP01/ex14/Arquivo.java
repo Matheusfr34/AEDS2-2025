@@ -1,5 +1,3 @@
-//package tps.tp01.ex08;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;

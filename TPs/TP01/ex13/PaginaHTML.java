@@ -1,4 +1,3 @@
-//package tps.tp01.ex07;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

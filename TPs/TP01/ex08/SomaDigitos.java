@@ -1,4 +1,3 @@
-//package TPs.TP01.ex08;
 import java.util.Scanner;
 
 public class SomaDigitos {

@@ -1,5 +1,3 @@
-//package TPs.TP01.ex04;
-
 import java.util.*;
 
 public class AlteracaoAleatoria {
