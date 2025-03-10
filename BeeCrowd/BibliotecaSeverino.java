@@ -25,6 +25,7 @@ public class BibliotecaSeverino {
             }
 
             ordenar(entrada);
+            
             for(String valores : entrada){
                 System.out.println(valores);
             }
