@@ -19,7 +19,7 @@ public class ListaDeCriancas {
 
         String entrada[] = new String[quantidade];
 
-        for(int i =0; i < quantidade; i++){
+        for(int i = 0; i < quantidade; i++){
             entrada[i] = sc.nextLine();
         }
 
