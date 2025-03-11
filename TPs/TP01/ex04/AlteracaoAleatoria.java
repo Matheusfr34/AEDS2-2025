@@ -2,10 +2,7 @@ import java.util.*;
 
 public class AlteracaoAleatoria {
 
-    public static String Alterar(String palavra) {
-        Random gerador = new Random();
-        gerador.setSeed(4);
-
+    public static String Alterar(String palavra, Random gerador) {
         char letra1 = (char) ('a' + (Math.abs(gerador.nextInt()) % 26));
         char letra2 = (char) ('a' + (Math.abs(gerador.nextInt()) % 26));
 
@@ -26,12 +23,14 @@ public class AlteracaoAleatoria {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Random gerador = new Random();
+        gerador.setSeed(4);
         while (sc.hasNextLine()) {
             String entrada = sc.nextLine();
             if (entrada.charAt(0) == 'F' && entrada.charAt(1) == 'I' && entrada.charAt(2) == 'M') {
                 break;
             }
-            System.out.println(Alterar(entrada));
+            System.out.println(Alterar(entrada, gerador));
         }
         sc.close();
     }
