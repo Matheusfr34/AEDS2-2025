@@ -34,7 +34,7 @@ public class ValidarSenha {
             if (senha.charAt(0) == 'F' && senha.charAt(1) == 'I' && senha.charAt(2) == 'M') {
                 break;
             }
-            System.out.println(validarSenha(senha) ? "SIM" : "NÃO");
+            System.out.println(validarSenha(senha) ? "SIM" : "NAO");
         }
 
         sc.close();

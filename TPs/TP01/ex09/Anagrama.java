@@ -11,14 +11,13 @@ public class Anagrama {
             return false;
         }
     
-        // Criar vetores para contar a frequência de cada caractere (considerando ASCII de 0 a 127)
         int[] contagem1 = new int[128];
         int[] contagem2 = new int[128];
     
         // Contar a frequência dos caracteres de cada palavra, considerando maiúsculas e minúsculas
         for (int i = 0; i < palavra1.length(); i++) {
-            char c1 = toLowerCase(palavra1.charAt(i));  // Converte para minúscula
-            char c2 = toLowerCase(palavra2.charAt(i));  // Converte para minúscula
+            char c1 = toLowerCase(palavra1.charAt(i));  
+            char c2 = toLowerCase(palavra2.charAt(i));  
     
             // Verifica se os caracteres estão dentro do intervalo ASCII válido
             if (c1 >= 0 && c1 < 128) {
@@ -50,12 +49,6 @@ public class Anagrama {
             }
         }
     
-        // Se não encontrou o separador correto, retorna duas strings vazias
-        if (posicao == -1) {
-            return new String[]{"", ""};
-        }
-    
-        // Criar arrays do tamanho correto
         char[] caracteresUm = new char[posicao];
         char[] caracteresDois = new char[frase.length() - posicao - 3]; // "- " ocupa 3 caracteres
     
@@ -68,23 +61,24 @@ public class Anagrama {
             caracteresDois[k] = frase.charAt(posicao + 3 + k);
         }
     
-        // Criar as Strings a partir dos arrays
         String parte1 = new String(caracteresUm);
         String parte2 = new String(caracteresDois);
     
         return new String[]{parte1, parte2};
     }
 
+    //Método para transformar as letras em maiúscula 
     public static char toUpperCase(char c) {
         if (c >= 'a' && c <= 'z') {
-            return (char) (c - 32);  // Convertendo para maiúscula
+            return (char) (c - 32);  // Esse trecho converte para maiúscula
         }
         return c;  // Se não for uma letra minúscula, retorna o mesmo caractere
     }
     
+    //Método para transformar as letras em maiúscula
     public static char toLowerCase(char c) {
         if (c >= 'A' && c <= 'Z') {
-            return (char) (c + 32);  // Convertendo para minúscula
+            return (char) (c + 32);  // Esse trecho converte para minúscula
         }
         return c;  // Se não for uma letra maiúscula, retorna o mesmo caractere
     }    
@@ -98,7 +92,7 @@ public class Anagrama {
                 break;
             }
             String[] resultado = dividir(entrada);
-            System.out.println(isAnagram(resultado) ? "SIM" : "NÃO");
+            MyIO.println(isAnagram(resultado) ? "SIM" : "NÃO");
         }
         sc.close();
     }
