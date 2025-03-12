@@ -19,19 +19,15 @@ bool ehPalindromo(char *texto){
 
 int main(){
     char entrada[100];
-    bool flag = false;
-    while(!flag){
+    while(!(strcmp(entrada, "FIM") == 0)){
         if(fgets(entrada, sizeof(entrada), stdin) != NULL){
             entrada[strcspn(entrada, "\n")] = '\0';
-            if(strlen(entrada) == 3 && entrada[0] == 'F' && entrada[1] == 'I' && entrada[2] == 'M'){
-                flag = true;
-            } else {
+          
                 if(ehPalindromo(entrada)){
                     printf("SIM\n");
                 } else {
                     printf("NAO\n");
                 }
-            }
         }
     }
 
