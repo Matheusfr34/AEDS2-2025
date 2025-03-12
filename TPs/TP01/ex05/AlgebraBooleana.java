@@ -1,220 +1,164 @@
-import java.util.InputMismatchException;
+// package ex05;
+
 import java.util.Scanner;
 
-public class AlgebraBooleana {
-    
+public class AlgebraBooleana{
 
-    public static boolean CMPString(String str1, String str2){
+	public static void main(String[] args){
 
-        boolean resp = true;
+		char response = ' ';
+		Scanner sc = new Scanner(System.in);
 
-        if(str1.length() == str2.length()){
-            for(int i = 0; i < str1.length(); i++){
-                if(str1.charAt(i) != str2.charAt(i)){
-                    resp = false;
-                    i = str1.length();
-                }
-            }
-            return resp;
-        }
-        else
-        {
-            resp = false;
-            return resp;
-        }
-    }
+		Integer entryNum = sc.nextInt();
 
-    public static int ASCIIToInt(int value) {
-        int resp = value - 48;
-        return resp;
-    }
+		while(entryNum != 0){
 
-    public static String replaceStr(String str, String regex, String replacement) {
-        str = str.replaceAll(regex, replacement);
-        return str;
-    }
+			Integer[] binaryValues = new Integer[entryNum];
 
-    public static int findFirstParentesis(String str){
-        for(int i = 0; i < str.length(); i++){
-            if(str.charAt(i) == ')'){
-                return i;
-            }
-        }
-        return str.length();
-    }
+			for(int i = 0; i < entryNum; i++){
 
-    public static int NOT(String str){
-        int op1 = ASCIIToInt(str.charAt(4));
+				binaryValues[i] = sc.nextInt();
 
-        return (op1 == 0) ? 1 : 0;
-    }
+			}
+			// sc.nextLine();
 
-    public static int findClosingParenthesis(String expression) {
-        int openCount = 0;
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-            if (c == '(') {
-                openCount++;
-            } else if (c == ')') {
-                openCount--;
-                if (openCount == 0) {
-                    return i;
-                }
-            }
-        }
-        return expression.length();
-    }
+			String bExpression = sc.nextLine();
 
-    public static int commaCount(String str){
-        int cont = 0;
-        for(int i = 0; i < str.length(); i++){
-            if(str.charAt(i) == ','){
-                cont++;
-            }
-        }
-        return cont;
-    }
-    
-    public static int countOpeningParenthesis(String str){
-        int cont = 0;
-        for(int i = 0; i < str.length(); i++){
-            if(str.charAt(i) == '('){
-                cont++;
-            }
-        }
-        return cont;
-    }
+			Integer countExpression = 0;
 
-    public static int avaliarSubStr(String str) {
+			Integer belength = bExpression.length();
 
-        if(str.startsWith("and(") && str.length() == 10){
-            int op1 = Integer.parseInt(str.substring(4,5));
-            int op2 = Integer.parseInt(str.substring(6,7));
-            int op3 = Integer.parseInt(str.substring(8,9));
-            return (op1 == 1 && op2 == 1 && op3 == 1) ? 1 : 0;
-        }
+			for(int i = 0; i < belength; i++)
+				if(bExpression.charAt(i) == '(')
+					countExpression++;
+			
+			char[] cbExp = bExpression.toCharArray();
+			while(countExpression > 0){
+				for(int i = 0; i < belength; i++){
+					if(cbExp[i] >= 65 && cbExp[i] <= 90){
+						int charValue = cbExp[i];
+						cbExp[i] = (char)('0' + binaryValues[charValue - 65]);
+					}else if(cbExp[i] == '(' && (cbExp[i + 1] == '0' || cbExp[i + 1] == '1')){
 
-        if(str.startsWith("or(") && str.length() == 10){
-            int op1 = Integer.parseInt(str.substring(3,4));
-            int op2 = Integer.parseInt(str.substring(5,6));
-            int op3 = Integer.parseInt(str.substring(7,8));
-            return (op1 == 0 && op2 == 0 && op3 == 0) ? 0 : 1;
-        }
+						//Movimentações NOT
+						if(cbExp[i - 1] == 't'){
+							countExpression--;
+							// System.out.println("Estou realizando o not");
+							if(cbExp[i + 1] == '0')
+								cbExp[i - 3] = '1';
+							else
+								cbExp[i - 3] = '0';
 
-        int openParenCount = 0;
-        int commaIndex = -1;
-        int size;
+							belength = belength - 5;
+							for(int j = i - 2; j < belength; j++){
+								cbExp[j] = cbExp[j + 5];
+							}
 
-        if(str.startsWith("or(")){
-            size = 3;
-        } else {
-            size = 4;
-        }
-        
-        for (int i = size; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (c == '(') {
-                openParenCount++;
-            } else if (c == ')') {
-                openParenCount--;
-            } else if (c == ',' && openParenCount == 0) {
-                commaIndex = i;
-                break;
-            }
-        }
+						//Movimentações AND
+						}else if(cbExp[i - 1] == 'd'){
+							int countLetters = 1;
+							for(int j = i; cbExp[j] != ')'; j++){
+								if(cbExp[j] == ',')
+									countLetters++;
+							}
+							int[] values = new int[countLetters];
+							int valid = 0;
+							int iteracoes = i + 1 + 5 + ((countLetters - 2) * 4);
+							for(int j = i + 1; j < iteracoes; j++){
+								// System.out.println(cbExp[j]);
+								if(cbExp[j] == '0' || cbExp[j] == '1'){
+									switch (cbExp[j]){
+										case '0':
+											values[valid] = 0;
+											break;
+										case '1':
+											values[valid] = 1;
+											break;
+									}
+									valid++;
+								}
+							}
+							if(valid == countLetters){
+								countExpression--;
+								// System.out.println("Estou realizando o and");
+								boolean torf = false;
+								for(int j = 0; j < values.length; j++){
+									if(values[j] == 0){
+										torf = false;
+										j = values.length;
+									}else
+										torf = true;
+								}
+								if(torf)
+									cbExp[i - 3] = '1';
+								else
+									cbExp[i - 3] = '0';
+								belength = belength - (9 + ((values.length - 2) * 4));
+								for(int j = i - 2; j < belength; j++){
+									cbExp[j] = cbExp[j + (9 + ((values.length - 2) * 4))];
+								}
+							}
 
-        if(commaIndex != -1){
-            if(commaCount(str) > 1 || countOpeningParenthesis(str) > 1){
-                if(str.startsWith("and(")){
-                    String subStr1 = str.substring(4, commaIndex);
-                    String subStr2 = str.substring(commaIndex+1, str.length()-1);
-                    int op1 = avaliarSubStr(subStr1);
-                    int op2 = avaliarSubStr(subStr2);
-                    return (op1 == 1 && op2 == 1) ? 1 : 0;
-                } else if(str.startsWith("not(")){
-                    int indexFechamento = findClosingParenthesis(str);
-                    int value = avaliarSubStr(str.substring(4, indexFechamento));
-                    return (value == 1) ? 0 : 1;
-                } else if(str.startsWith("or(")){
-                    String subStr1 = str.substring(3, commaIndex);
-                    String subStr2 = str.substring(commaIndex+1, str.length()-1);
-                    int op1 = avaliarSubStr(subStr1);
-                    int op2 = avaliarSubStr(subStr2);
-                    return (op1 == 0 && op2 == 0) ? 0 : 1;
-                } else {
-                    int valor = Integer.parseInt(str);
-                    return valor;
-                }
-            } else {
-                if(str.startsWith("and(")){
-                    int op1 = Integer.parseInt(str.substring(4,5));
-                    int op2 = Integer.parseInt(str.substring(6,7));
-                    return (op1 == 1 && op2 == 1) ? 1 : 0;
-                } else if(str.startsWith("not(")){
-                    int indexFechamento = findClosingParenthesis(str);
-                    int value = avaliarSubStr(str.substring(4, indexFechamento));
-                    return (value == 1) ? 0 : 1;
-                } else if(str.startsWith("or(")){
-                    int op1 = Integer.parseInt(str.substring(3,4));
-                    int op2 = Integer.parseInt(str.substring(5,6));
-                    return (op1 == 1 && op2 == 1 || op1 == 1 && op2 == 0 || op1 == 0 && op2 == 1) ? 1 : 0;
-                } else {
-                    int valor = Integer.parseInt(str);
-                    return valor;
-                }
-            }
-        } else if(str.startsWith("not(")){
-            int indexFechamento = findClosingParenthesis(str);
-            int op = avaliarSubStr(str.substring(4, indexFechamento));
-            return (op == 0) ? 1 : 0;
-        } else {
-            int valor = Integer.parseInt(str);
-            return valor;
-        }
-    }
+						//Movimentações OR
+						}else if(cbExp[i - 1] == 'r'){
+							int countLetters = 1;
+							for(int j = i; cbExp[j] != ')'; j++){
+								if(cbExp[j] == ',')
+									countLetters++;
+							}
+							int[] values = new int[countLetters];
+							int valid = 0;
+							int iteracoes = i + 1 + 5 + ((countLetters - 2) * 4);
+							for(int j = i; j < iteracoes; j++){
+								if(cbExp[j] == '0' || cbExp[j] == '1'){
+									switch (cbExp[j]){
+										case '0':
+											values[valid] = 0;
+											break;
+										case '1':
+											values[valid] = 1;
+											break;
+									}
+									valid++;
+								}
+							}
+							if(valid == countLetters){
+								countExpression--;
+								// System.out.println("Estou realizando o or");
+								boolean torf = false;
+								for(int j = 0; j < values.length; j++){
+									if(values[j] == 0){
+										torf = false;
+									}else{
+										torf = true;
+										j = values.length;
+									}
+								}
+								if(torf)
+									cbExp[i - 2] = '1';
+								else
+									cbExp[i - 2] = '0';
+								
+								belength = belength - (8 + ((values.length - 2) * 4));
+								for(int j = i - 1; j < belength; j++){
+									cbExp[j] = cbExp[j + (8 + ((values.length - 2) * 4))];
+								}
+							}
+						}
+					}
+				}
+					// bExpression = new String(cbExp);
+					// System.out.println(bExpression);
+					response = cbExp[1];
+			}
 
-    public static void BooleanLogic(String str) {
-        int size = ASCIIToInt((int) str.charAt(0));
-        int[] booleans = new int[size];
+			bExpression = new String(cbExp);
 
-        int x = 0;
-        for (int i = 0; i < size + x; i += 2) {
-            booleans[x] = ASCIIToInt((int) str.charAt(i + 2));
-            x++;
-        }
+			// System.out.println("há " + countExpression + " partes nessa expressão");
+			System.out.println(response);
+			entryNum = sc.nextInt();
+		}
 
-        int start = x * 2 + 1;
-        str = str.substring(start, str.length());
-
-        for (int i = 0; i < size; i++) {
-            int asciIndex = 65 + i;
-            char aux1 = (char) asciIndex;
-            String aux2 = Character.toString(aux1), aux3 = Integer.toString(booleans[i]);
-            str = replaceStr(str, aux2, aux3);
-        }
-
-        str = replaceStr(str, "\\s", "");
-
-        System.out.println(avaliarSubStr(str));
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int x = 0;
-        String s = "0";
-        while(x == 0){
-            try {
-                String str = sc.nextLine();
-                if(CMPString(str, s)){
-                    break;
-                }
-                BooleanLogic(str);
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Por favor, forneça uma entrada válida.");
-            } catch (Exception e) {
-                System.out.println("1");
-            }
-        }
-        sc.close();
-    }
+		sc.close();
+	}
 }
