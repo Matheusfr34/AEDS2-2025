@@ -27,7 +27,7 @@ class Pilha {
         int menor = array[0];
         for(int i = 0; i < tam; i++){
             if(menor > array[i + 1]){
-                menor = array[1 ];
+                menor = array[1];
             }
         }
         System.out.println(menor);
