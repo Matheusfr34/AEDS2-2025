@@ -7,23 +7,21 @@ public class DiamondsAndSand {
         sc.nextLine();
     
         for(int i = 0; i < testes; i++){
-            int contadorMaior = 0;
-            int  contadorMenor = 0;
+            int contador = 0;
+            int abrirChaves = 0;
             String entrada = sc.nextLine();
 
             for(int j = 0; j < entrada.length(); j++){
-                if (entrada.charAt(j) == '<'){
-                    contadorMenor++;
-                } else if((entrada.charAt(j) == '>')){
-                    contadorMaior++;
+                 if (entrada.charAt(j) == '<'){
+                    abrirChaves++;
+                }else if((entrada.charAt(j) == '>' && abrirChaves > 0)){
+                    contador++;
+                    abrirChaves--;
                 }
             }
             
-            int maior, menor;
-            maior = contadorMaior > contadorMenor ? contadorMaior : contadorMenor;
-            menor = contadorMenor < contadorMaior ? contadorMenor : contadorMaior;
-            if(maior != 0 && menor != 0){
-                System.out.println(menor);
+            if(contador > 0){
+                System.out.println(contador);
             } else {
                 System.out.println(0);
             }
