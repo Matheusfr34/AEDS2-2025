@@ -86,6 +86,15 @@ class Lista {
         return resp;
     }
 
+    public boolean pesquisar(int x){
+        for(int i = 0; i < n; i++){
+            if(array[i] == x){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void mostrar(){
         System.out.println();
         System.out.print("[ ");
@@ -148,7 +157,6 @@ class Lista {
         }
     }
 
-
 }
 
 public class ListaLinear {
@@ -168,6 +176,11 @@ public class ListaLinear {
         System.out.println("SOMA DOS NÚMEROS: " + lista.somar());
         System.out.println("MAIOR: " + lista.maior());
         System.out.println("QUANT. PARES E MÚLTIPLOS DE 5: " + lista.paresAndMultiplos());
+        if(lista.pesquisar(5)){
+            System.out.println("ELEMENTO EXISTE");
+        } else {
+            System.out.println("ELEMENTO NÃO EXISTE");
+        }
         lista.ordenarInsercao();
         lista.mostrar();
 
