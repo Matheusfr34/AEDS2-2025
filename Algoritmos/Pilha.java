@@ -23,13 +23,13 @@ class PilhaLinear {
     //Método para remover um elemento no fim (desempilhar ou pop) - Custo Computacional Θ(1)
     public int desempilhar(){
         if(n == 0){
-            throw new IllegalStateException("Array está cheio, não é possível inserir mais elementos.");
+            throw new IllegalStateException("Array está vazio.");
         }
 
         return array[--n];
     }
 
-    //Método para pesquisar se um elemento está presente na pilha
+    //Método para pesquisar se um elemento está presente na pilha - Custo Computacional Θ(n)
     public boolean pesquisar(int elemento){
         for(int i = 0; i < n; i++){
             if(array[i] == elemento){
