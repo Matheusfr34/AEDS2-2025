@@ -48,6 +48,13 @@ class PilhaLinear {
         System.out.println("]");
     }
 
+    //Método que imprime os elementos da pilha de forma recursiva, imprime na ordem que são removidos
+    public void mostrarRecursivo(int i){
+        if(i < n){
+            System.out.print(array[n - i - 1] + " ");
+            mostrarRecursivo(i + 1);
+        }
+    }
     
 }
 public class Pilha {
@@ -64,7 +71,7 @@ public class Pilha {
             pilha.empilhar(valor);
         }
 
-        pilha.mostrar();
+        pilha.mostrarRecursivo(0);
 
         sc.close();
     }
