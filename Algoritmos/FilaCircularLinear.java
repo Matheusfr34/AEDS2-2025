@@ -45,6 +45,14 @@ class FilaCircular{
         System.out.println("]");
     }
 
+    //Método recursivo para mostrar os elementos presentes na fila
+    public void mostrarRecursivo(int i){
+        if(i != ultimo){
+            System.out.print(array[i] + " ");
+            mostrarRecursivo((i + 1) % array.length);
+        }
+    }
+
     //Método para pesquisar se um elemento está presente na fila circular 
     public boolean pesquisar(int elemento){
         int i = primeiro;
@@ -59,7 +67,27 @@ class FilaCircular{
 
     //Método que verifica se uma fila circular está vazia
     public boolean isVazia(){
-        
+        if(primeiro == ultimo){
+            return true;
+        }
+        return false;
+    }
+
+    //Método que verifica se uma fila circular está cheia
+    public boolean isCheia(){
+        if(((ultimo + 1) % array.length) == primeiro){
+            return true;
+        }
+        return false;
+    }
+
+    //Método para retornar a posição 
+    public int retornarPos(int pos){
+        if(primeiro == ultimo || pos < 0 || pos >= ultimo){
+            System.out.println("Erro.");
+            return 0;
+        }
+        return array[pos];
     }
 }
 
@@ -76,7 +104,7 @@ public class FilaCircularLinear {
             fila.enfileirar(valor);
         }
 
-        fila.mostrar();
+        fila.mostrarRecursivo(0);
 
         sc.close();
     }
