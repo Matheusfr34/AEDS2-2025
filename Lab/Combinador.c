@@ -10,21 +10,25 @@ int main(){
     while (scanf("%s %s", str1, str2) != EOF){
         int tam1 = strlen(str1);
         int tam2 = strlen(str2);
-        
-        int maior = tam1 > tam2 ? tam1 : tam2;
-        int menor = tam1 < tam2 ? tam1 : tam2;
 
-        for (int i = 0, j = 1; i < maior; i++, j++){
-            if(j < menor){
-            juncao[i] = str1[i];
-            juncao[j] = str2[i];
-            } else {
-                juncao[i] = str1[i];
+        int maior = tam1 > tam2 ? tam1 : tam2;
+
+        int pos = 0;
+
+        for (int i = 0; i < maior; i++) {
+            if (i < tam1){
+                juncao[pos] = str1[i];
+                pos++;
+            }
+            if (i < tam2){
+                juncao[pos] = str2[i];
+                pos++;
             }
         }
 
-        printf("%s\n", juncao);
+        juncao[pos] = '\0';
 
+        printf("%s\n", juncao);
     }
     return 0;
 }
