@@ -12,7 +12,7 @@ package Algoritmos;
  * DESVANTAGENS:
  * 𝚯(n2) comparações
  * Não há melhor caso, pois sempre percorre todo array
- * Algoritmo não estável
+ * Algoritmo não estável e IN-PLACE
  */
 
 public class SelectionSort {
