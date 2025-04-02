@@ -1,4 +1,4 @@
-package Algoritmos;
+package Algoritmos.Pesquisa;
 
 /* A pesquisa binária faz uma busca sempre no meio do array e vai dividindo o escopo de busca pela metade 
  * a cada iteração. Por esse motivo, acaba sendo um algoritmo de pesquisa eficiente, porém o array precisa

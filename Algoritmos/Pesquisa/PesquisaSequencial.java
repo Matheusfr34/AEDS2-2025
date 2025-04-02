@@ -1,4 +1,4 @@
-package Algoritmos;
+package Algoritmos.Pesquisa;
 
 /* A pesquisa sequencial verifica o array posição por posição para encontrar um determinado elemento
  * para isso, eu criei a função pesquisar para fazer tal verificação. Caso o elemento exista no array,

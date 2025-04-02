@@ -1,5 +1,3 @@
-package Algoritmos;
-
 /*
  * O selection sort sempre pega o menor elemento do array e coloca ele na posição correta. 
  * Dessa forma, ele sempre percorre todo o array. 
