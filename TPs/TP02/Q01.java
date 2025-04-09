@@ -171,10 +171,10 @@ public class Q01 {
             while((linha = file.readLine()) != null){
                 linha = new String(linha.getBytes("ISO-8859-1"), charset);
                 //Implementar lógica
-
-
-
                 
+
+
+
             }
 
         } catch (IOException e) {
