@@ -23,7 +23,7 @@ typedef struct {
     char* country;
     Date date_added;
     bool has_date;
-    char* raw_date; // <- Adicionado para armazenar a data original do CSV
+    char* raw_date; 
     int release_year;
     char* rating;
     char* duration;
@@ -210,9 +210,9 @@ void imprimirShow(Show s) {
     printf("] ## %s ## ", strlen(s.country) > 0 ? s.country : "NaN");
 
     if (s.has_date)
-        printf("%s ## ", s.raw_date); // <- imprimir data original sem aspas
+        printf("%s ## ", s.raw_date); 
     else
-        printf("NaN ## ");
+        printf("March 1, 1900 ## ");
 
     printf("%d ## %s ## %s ## [", s.release_year, s.rating, s.duration);
 
@@ -261,7 +261,7 @@ int main() {
         }
         free(shows[i].cast);
         free(shows[i].country);
-        free(shows[i].raw_date); // <- liberar memória da data original
+        free(shows[i].raw_date);
         free(shows[i].rating);
         free(shows[i].duration);
         for (int j = 0; j < shows[i].listed_in_count; j++) {

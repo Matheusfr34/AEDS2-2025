@@ -162,7 +162,7 @@ class Show {
         sb.append(country.isEmpty() ? "NaN" : country).append(" ## ");
 
         if (date_added == null) {
-            sb.append("NaN").append(" ## ");
+            sb.append("March 1, 1900").append(" ## ");
         } else {
             sb.append(date_added.format(dtf)).append(" ## ");
         }

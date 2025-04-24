@@ -47,6 +47,7 @@ public class Quicksort {
         int array[] = {0, 1, 5, 3, 15, 16, 9, 10, 4, 3, 30, 5, 20, 48, 71, 82};
 
         ordenarQuicksort(array, 0, array.length - 1);
+        
         System.out.print("[ ");
         for(int valor : array){
             System.out.print(valor + " ");

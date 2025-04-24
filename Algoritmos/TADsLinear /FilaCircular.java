@@ -1,11 +1,11 @@
 import java.util.*;
 
-class FilaCircular{
+class Fila{
     int[] array;
     int primeiro, ultimo;
 
     //Construtor que cria a fila circular e aponta os ponteiros primeiro e ultimo para 0
-    public FilaCircular(int tam){
+    public Fila(int tam){
         array = new int[tam + 1];
         primeiro = ultimo = 0;
     }
@@ -91,13 +91,13 @@ class FilaCircular{
     }
 }
 
-public class FilaCircularLinear {
+public class FilaCircular {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         int tam = sc.nextInt();
 
-        FilaCircular fila = new FilaCircular(tam);
+        Fila fila = new Fila(tam);
 
         for(int i = 0; i < tam; i++){
             int valor = sc.nextInt();
