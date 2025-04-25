@@ -1,3 +1,23 @@
+/*
+ * O Insertion Sort percorre o array e insere cada elemento na posição correta dentro da parte já ordenada.
+ * É eficiente para conjuntos de dados pequenos ou quase ordenados.
+ * 
+ * CUSTO COMPUTACIONAL:
+ * - Pior caso: 𝚯(n²) (array em ordem inversa)
+ * - Melhor caso: 𝚯(n) (array já ordenado)
+ * - Caso médio: 𝚯(n²)
+ * 
+ * VANTAGENS:
+ * - Simples de implementar e eficiente para pequenos conjuntos de dados.
+ * - Estável (mantém a ordem relativa de elementos iguais).
+ * - In-place (baixo uso de memória adicional).
+ * - Adaptável: performance melhora com arrays parcialmente ordenados.
+ * 
+ * DESVANTAGENS:
+ * - Ineficiente para grandes volumes de dados (complexidade quadrática).
+ * - Número elevado de comparações e trocas no pior caso.
+ */
+
 import java.util.Scanner;
 
 public class Insercao {
