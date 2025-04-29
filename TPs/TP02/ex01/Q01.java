@@ -221,7 +221,7 @@ public class Q01 {
     //Método para preencher show com os dados do arquivo
     public static void preencherShows() {
 
-        String show = "/tmp/disneyplus.csv";
+        String show = "../disneyplus.csv";
 
         try {
             RandomAccessFile file = new RandomAccessFile(show, "r");
