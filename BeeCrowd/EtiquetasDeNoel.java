@@ -1,5 +1,3 @@
-//package ex2482.java;
-
 import java.util.Scanner;
 
 class Pais{

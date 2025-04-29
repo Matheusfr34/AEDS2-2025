@@ -1,5 +1,3 @@
-package ex1449.java;
-
 import java.util.Scanner;
 
 class Dicionario {
