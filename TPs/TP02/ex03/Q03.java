@@ -1,10 +1,11 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 class Show {
 	private String show_id;
@@ -142,19 +143,6 @@ class Show {
 	}
 
 	public void setListedIn(String[] listed_in) {
-		int len = listed_in.length;
-		for(int i = 0; i < len - 1; i++){
-			for(int j = 0; j < len - i - 1; j++){
-				String atual = listed_in[j];
-				String prox = listed_in[j + 1];
-
-				if(atual.compareTo(prox) > 0){
-					String aux = listed_in[j];
-					listed_in[j] = listed_in[j + 1];
-					listed_in[j + 1] = aux;
-				}
-			}
-		}
 		this.listed_in = listed_in;
 	}
 
@@ -307,10 +295,7 @@ class Show {
 						l_date_added = LocalDate.parse(splittedWords[i],formatter);
 						setDateAdded(l_date_added);
 					}else{
-						splittedWords[i] = "March 1, 1900";
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
-						l_date_added = LocalDate.parse(splittedWords[i],formatter);
-						setDateAdded(l_date_added);
+						setDateAdded(null);
 					}
 					break;
 				case 7:
@@ -366,49 +351,15 @@ class Show {
 	}
 }
 
-public class Q05{
-	public static void ordenaSelecao(Show[] array, Integer tam){
-		File log = new File("./858190_selecao.txt");
-		try{
-			FileWriter logw = new FileWriter(log);
-
-			long inicio = System.nanoTime();
-			Integer movimentacoes = 0;
-			Integer comparacoes = 0;
-
-			for(int i = 0; i < tam - 1; i++){
-				int menor = i;
-				for(int j = i + 1; j < tam; j++){
-					comparacoes++;
-					if(array[menor].getTitle().compareToIgnoreCase(array[j].getTitle()) > 0){
-						menor = j;
-					}
-				}
-				if(menor != i){
-					movimentacoes++;
-					Show aux = array[menor];
-					array[menor] = array[i];
-					array[i] = aux;
-				}
-			}
-
-			long fim = System.nanoTime();
-			long duracao = fim - inicio;
-
-			logw.write("858190\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
-
-			logw.close();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-	}
+public class Ex03{
 	public static void main(String[] args) throws FileNotFoundException{
 		Scanner sc = new Scanner(System.in);
-		File arquivo = new File("../disneyplus.csv");
+		File arquivo = new File("/tmp/disneyplus.csv");
 		Scanner filesc = new Scanner(arquivo,"UTF-8");
 		filesc.nextLine();
 
 		Show[] shows = new Show[1368];
+
 		for(int i = 0; i < 1368; i++){
 			String line = filesc.nextLine();
 			shows[i] = new Show();
@@ -416,20 +367,46 @@ public class Q05{
 		}
 		filesc.close();
 
-		String getId = sc.nextLine();
 		Show[] array = new Show[1368];
-		int array_tam = 0;
+
+		String getId = sc.nextLine();
+		Integer tam_array = 0;
 		while(!getId.equals("FIM")){
 			Integer id = Integer.parseInt(getId.substring(1,getId.length()));
-			array[array_tam++] = shows[id - 1].clone();
+			array[tam_array++] = shows[id - 1].clone();
 			getId = sc.nextLine();
 		}
 
-		ordenaSelecao(array,array_tam);
-		for(int i = 0; i < array_tam; i++){
-			array[i].imprimir();
+		arquivo = new File("./853431_sequencial.txt");
+		Integer comparacoes = 0;
+		long inicio = System.nanoTime();
+
+		String line = sc.nextLine();
+		while(!line.equals("FIM")){
+			Boolean found = false;
+			for(int i = 0; i < tam_array; i++){
+				comparacoes++;
+				if(array[i].getTitle().equals(line)){
+					found = true;
+				}
+			}
+			if(found)
+				System.out.println("SIM");
+			else
+				System.out.println("NAO");
+			line = sc.nextLine();
 		}
 
+		long fim = System.nanoTime();
+
+		long duracao = fim - inicio;
+		try{
+			FileWriter fw = new FileWriter(arquivo);
+			fw.write("853431\t" + (duracao / 1_000_000.0) + "ms\t" + comparacoes);
+			fw.close();
+		}catch (IOException e){
+			e.printStackTrace();
+		}
 		sc.close();
 	}
 }

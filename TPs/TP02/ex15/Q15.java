@@ -1,3 +1,5 @@
+// package ex15;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -366,9 +368,9 @@ class Show {
 	}
 }
 
-public class Q05{
+public class Q15{
 	public static void ordenaSelecao(Show[] array, Integer tam){
-		File log = new File("./858190_selecao.txt");
+		File log = new File("./853431_selecaoParcial.txt");
 		try{
 			FileWriter logw = new FileWriter(log);
 
@@ -376,11 +378,14 @@ public class Q05{
 			Integer movimentacoes = 0;
 			Integer comparacoes = 0;
 
-			for(int i = 0; i < tam - 1; i++){
+			for(int i = 0; i < 10; i++){
 				int menor = i;
 				for(int j = i + 1; j < tam; j++){
+
+					Boolean v1 = array[menor].getTitle().compareToIgnoreCase(array[j].getTitle()) > 0;
 					comparacoes++;
-					if(array[menor].getTitle().compareToIgnoreCase(array[j].getTitle()) > 0){
+
+					if(v1){
 						menor = j;
 					}
 				}
@@ -395,7 +400,7 @@ public class Q05{
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("858190\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
+			logw.write("853431\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){
@@ -404,7 +409,7 @@ public class Q05{
 	}
 	public static void main(String[] args) throws FileNotFoundException{
 		Scanner sc = new Scanner(System.in);
-		File arquivo = new File("../disneyplus.csv");
+		File arquivo = new File("/tmp/disneyplus.csv");
 		Scanner filesc = new Scanner(arquivo,"UTF-8");
 		filesc.nextLine();
 
@@ -426,7 +431,7 @@ public class Q05{
 		}
 
 		ordenaSelecao(array,array_tam);
-		for(int i = 0; i < array_tam; i++){
+		for(int i = 0; i < 10; i++){
 			array[i].imprimir();
 		}
 

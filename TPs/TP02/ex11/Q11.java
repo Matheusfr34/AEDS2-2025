@@ -1,3 +1,5 @@
+// package ex11;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -366,9 +368,21 @@ class Show {
 	}
 }
 
-public class Q05{
-	public static void ordenaSelecao(Show[] array, Integer tam){
-		File log = new File("./858190_selecao.txt");
+public class Q11{
+	public static Integer getMaiorAno(Show[] array,int len){
+		int maior = array[0].getReleaseYear();
+
+		for(int i = 1; i < len; i++){
+			if(array[i].getReleaseYear() > maior){
+				maior = array[i].getReleaseYear();
+			}
+		}
+		return maior;
+	}
+
+	public static Show[] ordenaCountingSort(Show[] array, Integer tam){
+		File log = new File("./853431_countingsort.txt");
+		Show[] ordenado = new Show[tam];
 		try{
 			FileWriter logw = new FileWriter(log);
 
@@ -376,35 +390,55 @@ public class Q05{
 			Integer movimentacoes = 0;
 			Integer comparacoes = 0;
 
-			for(int i = 0; i < tam - 1; i++){
-				int menor = i;
-				for(int j = i + 1; j < tam; j++){
-					comparacoes++;
-					if(array[menor].getTitle().compareToIgnoreCase(array[j].getTitle()) > 0){
-						menor = j;
-					}
-				}
-				if(menor != i){
+			int[] count = new int[getMaiorAno(array,tam) + 1];
+
+
+			int countlen = count.length;
+
+			for(int i = 0; i < countlen; count[i++] = 0);
+			
+
+			for(int i = 0; i < tam; count[array[i].getReleaseYear()]++, i++);
+
+
+			for(int i = 1; i < countlen; count[i] += count[i - 1] , i++);
+
+
+			for(int i = tam - 1; i >= 0;ordenado[count[array[i].getReleaseYear()] - 1] = array[i],count[array[i].getReleaseYear()]-- , i--, movimentacoes++);
+
+			for(int i = 1; i < tam; i++){
+				Show tmp = ordenado[i];
+				int j = i - 1;
+
+				while(j >= 0 && 
+					(tmp.getReleaseYear().equals(ordenado[j].getReleaseYear())) &&
+					(tmp.getTitle().compareToIgnoreCase(ordenado[j].getTitle()) < 0)){
+					comparacoes += 2;
 					movimentacoes++;
-					Show aux = array[menor];
-					array[menor] = array[i];
-					array[i] = aux;
+					ordenado[j + 1] = ordenado[j];
+					j--;
+				}
+				if(i != (j + 1)){
+					movimentacoes++;
+					ordenado[j + 1] = tmp;
 				}
 			}
+			
 
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("858190\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
+			logw.write("853431\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		return ordenado;
 	}
 	public static void main(String[] args) throws FileNotFoundException{
 		Scanner sc = new Scanner(System.in);
-		File arquivo = new File("../disneyplus.csv");
+		File arquivo = new File("/tmp/disneyplus.csv");
 		Scanner filesc = new Scanner(arquivo,"UTF-8");
 		filesc.nextLine();
 
@@ -425,9 +459,9 @@ public class Q05{
 			getId = sc.nextLine();
 		}
 
-		ordenaSelecao(array,array_tam);
+		Show[] ordenado = ordenaCountingSort(array,array_tam);
 		for(int i = 0; i < array_tam; i++){
-			array[i].imprimir();
+			ordenado[i].imprimir();
 		}
 
 		sc.close();

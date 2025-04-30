@@ -1,3 +1,5 @@
+// package ex09;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -366,45 +368,90 @@ class Show {
 	}
 }
 
-public class Q05{
-	public static void ordenaSelecao(Show[] array, Integer tam){
-		File log = new File("./858190_selecao.txt");
+public class Q09{
+	public static Integer getMaiorAno(Show[] array,int len){
+		int maior = array[0].getReleaseYear();
+
+		for(int i = 1; i < len; i++){
+			if(array[i].getReleaseYear() > maior){
+				maior = array[i].getReleaseYear();
+			}
+		}
+		return maior;
+	}
+
+	public static int verificaShow(Show a, Show b, Integer[] comp){
+		int resp = 0;
+
+		if(a.getDirector().compareToIgnoreCase(b.getDirector()) != 0){
+			comp[0]++;
+			resp = a.getDirector().compareToIgnoreCase(b.getDirector());
+		}else{
+			comp[0] += 2;
+			resp = a.getTitle().compareToIgnoreCase(b.getTitle());
+		}
+
+		return resp;
+	}
+
+	public static void constroiHeap(Show[] array, Integer len, Integer i, Integer[] mov, Integer[] comp){
+		int maior = i;
+		int esq= (2 * i) + 1;
+		int dir = (2 * i) + 2;
+
+		if(esq < len && verificaShow(array[esq], array[maior], comp) > 0){
+			maior = esq;
+		}
+		if(dir < len && verificaShow(array[dir], array[maior], comp) > 0){
+			maior = dir;
+		}
+
+		if(maior != i){
+			mov[0]++;
+			Show aux = array[i];
+			array[i] = array[maior];
+			array[maior] = aux;
+			constroiHeap(array, len, maior, mov, comp);
+		}
+	}
+	public static void heapsort(Show[] array, Integer len, Integer[] mov, Integer[]comp){
+		for(int i = (len / 2) - 1; i >= 0; i--){
+			constroiHeap(array,len, i,mov,comp);
+		}
+
+		for(int i = len - 1; i > 0; i--){
+			mov[0]++;
+			Show aux = array[0];
+			array[0] = array[i];
+			array[i] = aux;
+			constroiHeap(array, i, 0, mov, comp);
+		}
+	}
+	public static void ordenaHeapSort(Show[] array, Integer tam){
+		File log = new File("./853431_heapsort.txt");
 		try{
 			FileWriter logw = new FileWriter(log);
 
 			long inicio = System.nanoTime();
-			Integer movimentacoes = 0;
-			Integer comparacoes = 0;
+			Integer[] mov = {0};
+			Integer[] comp = {0};
 
-			for(int i = 0; i < tam - 1; i++){
-				int menor = i;
-				for(int j = i + 1; j < tam; j++){
-					comparacoes++;
-					if(array[menor].getTitle().compareToIgnoreCase(array[j].getTitle()) > 0){
-						menor = j;
-					}
-				}
-				if(menor != i){
-					movimentacoes++;
-					Show aux = array[menor];
-					array[menor] = array[i];
-					array[i] = aux;
-				}
-			}
+			heapsort(array, tam, mov, comp);
 
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("858190\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
+			logw.write("853431\t" + comp[0] + "\t" + mov[0] + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		
 	}
 	public static void main(String[] args) throws FileNotFoundException{
 		Scanner sc = new Scanner(System.in);
-		File arquivo = new File("../disneyplus.csv");
+		File arquivo = new File("/tmp/disneyplus.csv");
 		Scanner filesc = new Scanner(arquivo,"UTF-8");
 		filesc.nextLine();
 
@@ -425,8 +472,10 @@ public class Q05{
 			getId = sc.nextLine();
 		}
 
-		ordenaSelecao(array,array_tam);
+		ordenaHeapSort(array, array_tam);
+
 		for(int i = 0; i < array_tam; i++){
+			// System.out.println(array[i].getShow_id() + " " + array[i].getDirector());
 			array[i].imprimir();
 		}
 

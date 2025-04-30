@@ -366,9 +366,9 @@ class Show {
 	}
 }
 
-public class Q05{
-	public static void ordenaSelecao(Show[] array, Integer tam){
-		File log = new File("./858190_selecao.txt");
+public class Ex07{
+	public static void ordenaInsercao(Show[] array, Integer tam){
+		File log = new File("./853431_insercao.txt");
 		try{
 			FileWriter logw = new FileWriter(log);
 
@@ -376,26 +376,32 @@ public class Q05{
 			Integer movimentacoes = 0;
 			Integer comparacoes = 0;
 
-			for(int i = 0; i < tam - 1; i++){
-				int menor = i;
-				for(int j = i + 1; j < tam; j++){
-					comparacoes++;
-					if(array[menor].getTitle().compareToIgnoreCase(array[j].getTitle()) > 0){
-						menor = j;
+			for(int i = 1; i < tam; i++){
+				Show tmp = array[i];
+				int j = i - 1;
+				while(j >= 0 && 
+						(tmp.getType().compareToIgnoreCase(array[j].getType()) < 0 ||
+						(tmp.getType().compareToIgnoreCase(array[j].getType()) == 0 &&
+						 tmp.getTitle().compareToIgnoreCase(array[j].getTitle()) < 0))){
+					if(tmp.getType().compareToIgnoreCase(array[j].getType()) < 0){
+						comparacoes++;
+					}else{
+						comparacoes += 3;
 					}
-				}
-				if(menor != i){
 					movimentacoes++;
-					Show aux = array[menor];
-					array[menor] = array[i];
-					array[i] = aux;
+					array[j + 1] = array[j];
+					j--;
+				}
+				if(i != j + 1){
+					movimentacoes++;
+					array[j + 1] = tmp;
 				}
 			}
 
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("858190\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
+			logw.write("853431\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){
@@ -404,7 +410,7 @@ public class Q05{
 	}
 	public static void main(String[] args) throws FileNotFoundException{
 		Scanner sc = new Scanner(System.in);
-		File arquivo = new File("../disneyplus.csv");
+		File arquivo = new File("/tmp/disneyplus.csv");
 		Scanner filesc = new Scanner(arquivo,"UTF-8");
 		filesc.nextLine();
 
@@ -425,11 +431,11 @@ public class Q05{
 			getId = sc.nextLine();
 		}
 
-		ordenaSelecao(array,array_tam);
+		ordenaInsercao(array,array_tam);
+
 		for(int i = 0; i < array_tam; i++){
 			array[i].imprimir();
 		}
-
 		sc.close();
 	}
 }
