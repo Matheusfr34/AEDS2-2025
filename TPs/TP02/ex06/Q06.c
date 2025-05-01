@@ -586,8 +586,8 @@ int main(){
 	clock_t fim = clock();
 	double duration = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-	FILE *log = fopen("./853431_selecaoRecursiva.txt","w");
-	fprintf(log,"853431\t%d\t%d\t%.6f",comp,mov,duration * 1000);
+	FILE *log = fopen("./858190_selecaoRecursiva.txt","w");
+	fprintf(log,"858190\t%d\t%d\t%.6f",comp,mov,duration * 1000);
 	fclose(log);
 
 	for(int i = 0; i < tam_array; i++){

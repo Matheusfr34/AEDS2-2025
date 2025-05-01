@@ -366,9 +366,9 @@ class Show {
 	}
 }
 
-public class Ex07{
+public class Q07{
 	public static void ordenaInsercao(Show[] array, Integer tam){
-		File log = new File("./853431_insercao.txt");
+		File log = new File("./858190_insercao.txt");
 		try{
 			FileWriter logw = new FileWriter(log);
 
@@ -401,7 +401,7 @@ public class Ex07{
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("853431\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
+			logw.write("858190\t" + comparacoes + "\t" + movimentacoes + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){

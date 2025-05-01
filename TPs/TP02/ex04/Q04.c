@@ -205,10 +205,6 @@ void ler(SHOW *a, char *line){
 		}
 	}
 
-	// printf("\nDetectado:");
-	// for(int i = 0; i < 11; i++)
-	// 	printf("\n %d - %s",i + 1, atributos[i]);
-
 	for(int i = 0; i < 11; i++){
 		switch(i){
 			case 0:
@@ -216,7 +212,6 @@ void ler(SHOW *a, char *line){
 					size_t len = strlen(atributos[i]);
 					a->show_id =(char *)malloc((len + 1) * sizeof(char));
 					strcpy(a->show_id,atributos[i]);
-					// printf("\n%s\n",a->show_id);
 					break;
 				}
 			case 1:
@@ -242,8 +237,6 @@ void ler(SHOW *a, char *line){
 				}
 			case 4:
 				{
-					// printf("\n%s, %s\n",a->show_id, atributos[i]);
-					// printf("\n%ld\n",strlen(atributos[i]));
 					if(strcmp(atributos[i],"NaN") != 0 || strlen(atributos[i]) != 0){
 						int quantidade = 1;
 						int len = strlen(atributos[i]);
@@ -511,8 +504,8 @@ int main(){
 
 	double tempo_ms = ((double) (fim - inicio) / CLOCKS_PER_SEC) * 1000;
 	
-	FILE *info = fopen("./853431_binaria.txt","w");
-	fprintf(info,"853431\t%.6lf\t%d",tempo_ms,compara);
+	FILE *info = fopen("./858190_binaria.txt","w");
+	fprintf(info,"858190\t%.6lf\t%d",tempo_ms,compara);
 	fclose(info);
 	
 	free(array);

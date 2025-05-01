@@ -377,7 +377,7 @@ public class Ex03{
 			getId = sc.nextLine();
 		}
 
-		arquivo = new File("./853431_sequencial.txt");
+		arquivo = new File("./858190_sequencial.txt");
 		Integer comparacoes = 0;
 		long inicio = System.nanoTime();
 
@@ -402,7 +402,7 @@ public class Ex03{
 		long duracao = fim - inicio;
 		try{
 			FileWriter fw = new FileWriter(arquivo);
-			fw.write("853431\t" + (duracao / 1_000_000.0) + "ms\t" + comparacoes);
+			fw.write("858190\t" + (duracao / 1_000_000.0) + "ms\t" + comparacoes);
 			fw.close();
 		}catch (IOException e){
 			e.printStackTrace();

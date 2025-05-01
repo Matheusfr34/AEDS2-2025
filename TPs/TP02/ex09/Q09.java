@@ -428,7 +428,7 @@ public class Q09{
 		}
 	}
 	public static void ordenaHeapSort(Show[] array, Integer tam){
-		File log = new File("./853431_heapsort.txt");
+		File log = new File("./858190_heapsort.txt");
 		try{
 			FileWriter logw = new FileWriter(log);
 
@@ -441,7 +441,7 @@ public class Q09{
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("853431\t" + comp[0] + "\t" + mov[0] + "\t" + duracao/1_000_000.0 );
+			logw.write("858190\t" + comp[0] + "\t" + mov[0] + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){
