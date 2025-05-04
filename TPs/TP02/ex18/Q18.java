@@ -427,7 +427,7 @@ public class Q18{
 		}
 	}
 	public static void ordenaQuick(Show[] array, Integer tam){
-		File log = new File("./853431_quicksortParcial.txt");
+		File log = new File("./858190_quicksortParcial.txt");
 		try{
 			FileWriter logw = new FileWriter(log);
 
@@ -442,7 +442,7 @@ public class Q18{
 			long fim = System.nanoTime();
 			long duracao = fim - inicio;
 
-			logw.write("853431\t" + comparacoes[0] + "\t" + movimentacoes[0] + "\t" + duracao/1_000_000.0 );
+			logw.write("858190\t" + comparacoes[0] + "\t" + movimentacoes[0] + "\t" + duracao/1_000_000.0 );
 
 			logw.close();
 		}catch(IOException e){
