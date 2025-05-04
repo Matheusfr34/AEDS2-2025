@@ -43,7 +43,7 @@ class Fila {
         return false;
     }
 
-    //Método que imprime os elementos da pilha, imprime na ordem que são inseridos
+    //Método que imprime os elementos da fila, imprime na ordem que são inseridos
     public void mostrar(){
         System.out.print("[ ");
         for(int i = 0; i < n; i++){
