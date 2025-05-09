@@ -3,7 +3,9 @@
  *Se as ilhas de origem tiverem a mesma ilha de destino -> Not invertible
  *Se as mesmas ilhas de origem tiverem a ilha de destino diferente -> Not a function
 */
+
 import java.util.Scanner;
+
 public class IsolatedIslands{
     public static void main(String[] args) {
 
