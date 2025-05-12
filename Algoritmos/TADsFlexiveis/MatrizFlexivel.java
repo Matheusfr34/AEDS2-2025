@@ -204,6 +204,7 @@ class Matriz {
     }
 
     // Exercício 5 - Método que imprime os elementos da diagonal principal
+    
 
 }
 
