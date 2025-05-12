@@ -1,95 +1,141 @@
 import java.util.Scanner;
 
-class Crianca {
-    String nome;
-    int valor;
+public class AcampamentoDeFerias{
+	public static void main(String[] args){
+		Scanner sc = new Scanner(System.in);
 
-    public Crianca(String nome, int valor) {
-        this.nome = nome;
-        this.valor = valor;
-    }
+
+		int pessoas = sc.nextInt();
+
+		while(pessoas != 0){
+			Lista lista = new Lista();
+			for(int i = 0; i < pessoas; i++){
+				String nome = sc.next();
+				int value = sc.nextInt();
+				lista.inserirFim(new Pessoa(nome,value));
+			}
+			// lista.mostrar();
+			lista.playGame();
+			pessoas = sc.nextInt();
+		}
+
+		sc.close();
+	}
 }
 
-class FilaCircular {
-    Crianca[] fila;
-    int tam;
-    int total;
+class Lista{
+	private CelulaDupla primeiro;
+	private CelulaDupla ultimo;
+	private int tam;
 
-    public FilaCircular(int tamanho) {
-        tam = tamanho;
-        fila = new Crianca[tam];
-        total = 0;
-    }
+	public Lista(){
+		this.primeiro = this.ultimo = null;
+		tam = 0;
+	}
 
-    public void enfileirar(String nome, int valor) {
-        fila[total++] = new Crianca(nome, valor);
-    }
+	public void inserirFim(Pessoa x){
+		tam++;
+		CelulaDupla tmp = new CelulaDupla(x);
+		if(this.primeiro == null && this.ultimo == null){
+			tmp.setProx(tmp);
+			tmp.setAnt(tmp);
+			this.primeiro = tmp;
+			this.ultimo = tmp;
+		}else{
+			this.ultimo.setProx(tmp);
+			this.primeiro.setAnt(tmp);
+			tmp.setProx(primeiro);
+			tmp.setAnt(ultimo);
+			ultimo = tmp;
+		}
+		tmp = null;
+	}
 
-    public Crianca remover(int pos) {
-        Crianca removida = fila[pos];
-        for (int i = pos; i < total - 1; i++) {
-            fila[i] = fila[i + 1];
-        }
-        total--;
-        return removida;
-    }
+	public void mostrar(){
+		System.out.print("[ ");
+		for(CelulaDupla i = primeiro; i.getProx() != primeiro; i = i.getProx()){
+			System.out.print(i.getElemento().getNome() + ", ");
+			if(i.getProx().getProx() == primeiro){
+				System.out.print(i.getProx().getElemento().getNome() + ", ");
+			}
+		}
+		System.out.println("]");
+	}
 
-    public Crianca get(int pos) {
-        return fila[pos];
-    }
+	public void playGame(){
+		CelulaDupla target = primeiro;
+		int value = primeiro.getElemento().getValue();
+		while(tam > 1){
+			if(value % 2 == 0){
+				// System.out.println("PAR" + value);
+				for(CelulaDupla i = target.getProx(); value >= 0; value--, i = i.getProx()){
+					target = i;
+					// System.out.println(value + " " + target.getElemento().getNome());
+				}
+			}else{
+				// System.out.println("IMPAR" + value);
+				for(CelulaDupla i = target.getAnt(); value >= 0; value--, i = i.getAnt()){
+					target = i;
+					// System.out.println(value + " " + target.getElemento().getNome());
+				}
+			}
+			tam--;
+			target.getProx().setAnt(target.getAnt());
+			target.getAnt().setProx(target.getProx());
+			value = target.getElemento().getValue();
+		}
+		System.out.println("Vencedor(a): " + target.getProx().getElemento().getNome());
 
-    public int tamanho() {
-        return total;
-    }
+	}
+
+	public CelulaDupla getUltimo() { return ultimo; }
+	public CelulaDupla getPrimeiro() { return primeiro; }
+
+	public void setUltimo(CelulaDupla ultimo) { this.ultimo = ultimo; }
+	public void setPrimeiro(CelulaDupla primeiro) { this.primeiro = primeiro; }
 }
 
-public class AcampamentoDeFerias {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int entrada = sc.nextInt();
+class CelulaDupla{
+	private Pessoa elemento;
+	private CelulaDupla ant;
+	private CelulaDupla prox;
 
-        while (entrada != 0) {
-            FilaCircular fila = new FilaCircular(entrada);
+	public CelulaDupla(){
+		this.elemento = new Pessoa();
+		this.ant = this.prox = null;
+	}
 
-            for (int i = 0; i < entrada; i++) {
-                String nome = sc.next();
-                int valor = sc.nextInt();
-                fila.enfileirar(nome, valor);
-            }
+	public CelulaDupla(Pessoa elemento){
+		this.elemento = elemento;
+		this.ant = this.prox = null;
+	}
 
-            int idx = 0;
-            int passo = fila.get(idx).valor;
+	public Pessoa getElemento() { return elemento; }
+	public CelulaDupla getAnt() { return ant; }
+	public CelulaDupla getProx() { return prox; }
 
-            while (fila.tamanho() > 1) {
-                // Determina a direção: 1 para horário (par), -1 para anti-horário (ímpar)
-                int direcao = (passo % 2 == 0) ? -1 : 1;
-                
-                // Calcula a posição da criança a ser eliminada
-                int eliminar = (idx + direcao * (passo - 1)) % fila.tamanho();
-                if (eliminar < 0) {
-                    eliminar += fila.tamanho();
-                }
+	public void setAnt(CelulaDupla ant) { this.ant = ant; }
+	public void setProx(CelulaDupla prox) { this.prox = prox; }
+	public void setElemento(Pessoa elemento) { this.elemento = elemento; }
+}
 
-                Crianca removida = fila.remover(eliminar);
-                passo = removida.valor;
-                
-                // Atualiza o índice para a próxima rodada
-                if (direcao == 1) {
-                    idx = eliminar % fila.tamanho();
-                } else {
-                    idx = (eliminar - 1 + fila.tamanho()) % fila.tamanho();
-                }
-                
-                // Ajuste para evitar índice negativo
-                if (idx < 0) {
-                    idx += fila.tamanho();
-                }
-            }
+class Pessoa{
+	private String nome;
+	private int value;
 
-            System.out.println("Vencedor(a): " + fila.get(0).nome);
-            entrada = sc.nextInt();
-        }
+	public Pessoa(){
+		this.nome = "Sem nome";
+		this.value = 0;
+	}
 
-        sc.close();
-    }
+	public Pessoa(String nome, int value){
+		this.nome = nome;
+		this.value = value;
+	}
+
+	public String getNome() { return nome; }
+	public int getValue() { return value; }
+
+	public void setValue(int value) { this.value = value; }
+	public void setNome(String nome) { this.nome = nome; }
 }
