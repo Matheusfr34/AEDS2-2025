@@ -202,8 +202,6 @@ class Matriz {
         }
         System.out.println();
     }
-
-    // Exercício 5 - Método que imprime os elementos da diagonal principal
     
 
 }
