@@ -223,6 +223,70 @@ class Arvore {
         }
         return j;
     }
+
+    /* ------ EXERCICIOS ÁRVORE BINÁRIA ------ */
+
+    //Exercício 1 - Método que retorna a altura árvore
+    public int getAltura(No i, int altura){
+        if(i == null){
+            altura--;
+        } else {
+            int alturaEsq = getAltura(i.esq, altura++);
+            int alturaDir = getAltura(i.dir, altura++);
+            altura = (alturaEsq > alturaDir) ? alturaEsq : alturaDir;
+        }
+        return altura;
+    }
+    
+    //Exercício 2 - Método que retorna a soma dos elementos presentes na árvore
+    public int soma(){
+        return soma(raiz);
+    }
+
+    private int soma(No i){
+        int soma = 0;
+        if(i != null){
+            soma = i.elemento + soma(i.esq) + soma(i.dir);
+        }
+        return soma;
+    }
+
+    //Exercício 3 - Método que retorna o número de elementos pares existente na árvore 
+    public int contarPares(){
+        return contarPares(raiz);
+    }
+
+    private int contarPares(No i){
+        int contador = 0;
+
+        if(i != null){
+            if(i.elemento % 2 == 0){
+                contador++;
+            }
+            contador += contarPares(i.esq);
+            contador += contarPares(i.dir);
+        }
+
+        return contador;
+    }
+
+    //Exercício 4 - Método que retorna true se a árvore contém algum número divisível por 11
+    public boolean contemDiviselOnze() {
+        return contemDivisivelOnze(raiz);
+    }
+    
+    private boolean contemDivisivelOnze(No i) {
+        if (i == null) {
+            return false;
+        }
+        
+        if (i.elemento % 11 == 0) {
+            return true;
+        }
+        
+        return contemDivisivelOnze(i.esq) || contemDivisivelOnze(i.dir);
+    }
+
 }
 
 public class ArvoreBinaria {
@@ -348,5 +412,10 @@ public class ArvoreBinaria {
         arvore.caminharPos();
         System.out.println("Maior elemento: " + arvore.getMaior());
         System.out.println("Menor elemento: " + arvore.getMenor());
+
+        // Teste 11: Soma dos elementos contidos na árvore
+        System.out.println("Soma: " + arvore.soma());
+        System.out.println("Quant. de números pares: " + arvore.contarPares());
+        System.out.println("Contém divisível por 11: " + arvore.contemDiviselOnze());
     }
 }
