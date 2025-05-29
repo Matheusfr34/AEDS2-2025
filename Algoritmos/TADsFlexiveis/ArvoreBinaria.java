@@ -166,8 +166,8 @@ class Arvore {
         int resp = 0;
         if (raiz != null) {
             No i;
-            for (i = raiz; i.esq != null; i = i.esq)
-                ;
+            for (i = raiz; i.esq != null; i = i.esq);
+            
             resp = i.elemento;
         }
 
