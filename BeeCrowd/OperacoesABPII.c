@@ -43,9 +43,9 @@ No* remover(No* i, int x) {
     if (i == NULL) {
         return NULL;
     } else if (x < i->elemento) {
-        i->esq = remover(i->esq, x);  // corrigido
+        i->esq = remover(i->esq, x);
     } else if (x > i->elemento) {
-        i->dir = remover(i->dir, x);  // corrigido
+        i->dir = remover(i->dir, x);
     } else {
         if (i->esq == NULL) {
             No* temp = i->dir;
