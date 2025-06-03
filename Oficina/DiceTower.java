@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class DiceTower {
 
     public static void main(String[] args) {
+        
         Scanner sc = new Scanner(System.in);
         int favourite = sc.nextInt();
         long values[] = new long[favourite];
@@ -21,6 +22,6 @@ public class DiceTower {
             }
         }
                 
-                sc.close();
-            }
+        sc.close();
     }
+}
