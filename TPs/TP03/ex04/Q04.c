@@ -2,7 +2,6 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <stdbool.h>
-#include <time.h>
 
 typedef struct{
 	int date;
@@ -25,6 +24,62 @@ typedef struct{
 	char **listed_in;
 	size_t listedLen;
 }SHOW;
+
+
+SHOW clone(SHOW show){
+	SHOW clone;
+
+	clone.show_id = (char *)calloc(strlen(show.show_id) + 1,sizeof(char));
+	strcpy(clone.show_id,show.show_id);
+
+	clone.type = (char *)calloc(strlen(show.type) + 1,sizeof(char));
+	strcpy(clone.type,show.type);
+
+	clone.title = (char *)calloc(strlen(show.title) + 1,sizeof(char));
+	strcpy(clone.title,show.title);
+
+	clone.director = (char *)calloc(strlen(show.director) + 1,sizeof(char));
+	strcpy(clone.director,show.director);
+
+	clone.castLen = show.castLen;
+
+	if(clone.castLen > 0){
+		clone.cast = (char **)calloc(clone.castLen, sizeof(char *));
+		for(int i = 0; i < clone.castLen; i++){
+			clone.cast[i] = (char *)calloc(strlen(show.cast[i]) + 1, sizeof(char));
+			strcpy(clone.cast[i],show.cast[i]);
+		}
+	}else{
+		clone.cast = NULL;
+	}
+
+	clone.country = (char *)calloc(strlen(show.country) + 1,sizeof(char));
+	strcpy(clone.country,show.country);
+
+	clone.date_added = show.date_added;
+
+	clone.release_year = show.release_year;
+
+	clone.rating = (char *)calloc(strlen(show.rating) + 1,sizeof(char));
+	strcpy(clone.rating,show.rating);
+
+	clone.duration = (char *)calloc(strlen(show.duration) + 1,sizeof(char));
+	strcpy(clone.duration,show.duration);
+
+	clone.listedLen = show.listedLen;
+
+	if(clone.listedLen > 0){
+		clone.listed_in = (char **)calloc(clone.listedLen, sizeof(char *));
+		for(int i = 0; i < clone.listedLen; i++){
+			clone.listed_in[i] = (char *)calloc(strlen(show.listed_in[i]) + 1, sizeof(char));
+			strcpy(clone.listed_in[i],show.listed_in[i]);
+		}
+	}else{
+		clone.listed_in = NULL;
+	}
+
+	return clone;
+}
 
 int monthToInteger(char *w){
 	int resp = 0;
@@ -205,6 +260,10 @@ void ler(SHOW *a, char *line){
 		}
 	}
 
+	// printf("\nDetectado:");
+	// for(int i = 0; i < 11; i++)
+	// 	printf("\n %d - %s",i + 1, atributos[i]);
+
 	for(int i = 0; i < 11; i++){
 		switch(i){
 			case 0:
@@ -212,6 +271,7 @@ void ler(SHOW *a, char *line){
 					size_t len = strlen(atributos[i]);
 					a->show_id =(char *)malloc((len + 1) * sizeof(char));
 					strcpy(a->show_id,atributos[i]);
+					// printf("\n%s\n",a->show_id);
 					break;
 				}
 			case 1:
@@ -237,6 +297,8 @@ void ler(SHOW *a, char *line){
 				}
 			case 4:
 				{
+					// printf("\n%s, %s\n",a->show_id, atributos[i]);
+					// printf("\n%ld\n",strlen(atributos[i]));
 					if(strcmp(atributos[i],"NaN") != 0 || strlen(atributos[i]) != 0){
 						int quantidade = 1;
 						int len = strlen(atributos[i]);
@@ -328,9 +390,9 @@ void ler(SHOW *a, char *line){
 						a->date_added.date = atoi(c_date);
 						a->date_added.year = atoi(c_year);
 					}else{
-						a->date_added.month = 0;
-						a->date_added.date = 0;
-						a->date_added.year = 0;
+						a->date_added.month = 3;
+						a->date_added.date = 1;
+						a->date_added.year = 1900;
 					}
 					break;
 				}
@@ -378,6 +440,19 @@ void ler(SHOW *a, char *line){
 									j++;
 								}
 							}
+						}
+
+						size_t s_len = a->listedLen;
+						for(int j = 0; j < s_len - 1; j++){
+							int menor = j;
+							for(int k = j + 1; k < s_len; k++){
+								if(strcmp(a->listed_in[k],a->listed_in[menor]) < 0){
+									menor = k;
+								}
+							}
+							char *aux = a->listed_in[j];
+							a->listed_in[j] = a->listed_in[menor];
+							a->listed_in[menor] = aux;
 						}
 
 					}else{
@@ -428,9 +503,68 @@ void freeShow(SHOW *i){
 	}
 }
 
-SHOW clone(SHOW show){
-	SHOW clone = show;
-	return clone;
+typedef struct{
+	SHOW *array;
+	int inicio;
+	int fim;
+	int tam;
+}FILA_C;
+
+FILA_C* new_fila(){
+	FILA_C *tmp = (FILA_C *)malloc(sizeof(FILA_C));
+	tmp->array = (SHOW *)calloc(5, sizeof(SHOW));
+	tmp->inicio = 0;
+	tmp->fim = 0;
+	tmp->tam = 0;
+
+	return tmp;
+}
+
+int estaCheia(FILA_C *f){
+	return f->tam == 5;
+}
+
+int estaVazia(FILA_C *f){
+	return f->tam == 0;
+}
+
+int getMedia(FILA_C *fila){
+	int resp = 0;
+	for(int i = 0, j = fila->inicio; i < fila->tam; i++){
+		j = j % 5;
+		resp+=fila->array[j++].release_year;
+	}
+	return resp/fila->tam;
+}
+
+SHOW remover(FILA_C *fila){
+	if(estaVazia(fila)){
+		printf("Está vazia!\n");
+	}
+	SHOW tmp = fila->array[fila->inicio];
+	fila->inicio = (fila->inicio + 1) % 5;
+	fila->tam--;
+	return tmp;
+}
+
+void inserir(FILA_C *fila, SHOW show){
+	if(estaCheia(fila)){
+		remover(fila);
+	}
+	fila->array[fila->fim] = clone(show);
+	fila->fim = (fila->fim + 1) % 5;
+	fila->tam++;
+	printf("[Media] %d\n",getMedia(fila));
+}
+
+void mostrarRestante(FILA_C *fila){
+	int index = fila->tam - 1;
+	for(int i = 0, j = fila->inicio; i < fila->tam; i++){
+		j = j % 5;
+		printf("[%d] ",index--);
+		imprimir(fila->array+j);
+		j++;
+	}
 }
 
 int main(){
@@ -450,66 +584,48 @@ int main(){
 	free(line);
 	fclose(file);
 
-	char *entry = (char *)malloc(255 * sizeof(char));
-	SHOW *array = (SHOW *)calloc(1368,sizeof(SHOW));
-	int tam_array = 0;
+	FILA_C *fila_shows = new_fila();
 
+	char *entry = (char *)malloc(255 * sizeof(char));
 	scanf("%s",entry);
 
 	while(strcmp(entry,"FIM") != 0){
 		int id = atoi((entry + 1));
-		*(array + tam_array++) = clone(*(shows + --id));
+		inserir(fila_shows,  *(shows + (--id)));
 		scanf("%s",entry);
 	}
+	
+	int ops;
 
-	for(int i = 0; i < tam_array - 1; i++){
-		for(int j = 0; j < tam_array - i - 1; j++){
-			if(strcmp((array + j)->title,(array + j + 1)->title) > 0){
-				SHOW aux = *(array + j);
-				*(array + j) = *(array + j + 1);
-				*(array + j + 1) = aux;
-			}
+	scanf("%d",&ops);
+	getchar();
+
+	for(int i = 0; i < ops; i++){
+		char *line = (char *)malloc(255 * sizeof(char));
+
+		scanf("%s",line);
+		getchar();
+
+		if(strcmp(line,"I") == 0){
+
+			char *getId = (char *)malloc(255 * sizeof(char));
+			scanf("%s",getId);
+			getchar();
+			int id = atoi(getId + 1);
+			inserir(fila_shows,*(shows + (--id)));
+
+		}else if(strcmp(line,"R") == 0){
+
+			SHOW getShow = remover(fila_shows);
+			printf("(R) %s\n",getShow.title);
+
 		}
+
+		free(line);
 	}
 
-	readLine(entry,255,stdin);
+	mostrarRestante(fila_shows);
 
-	int compara = 0;
-	clock_t inicio = clock();
-	while(strcmp(entry,"FIM") != 0){
-		int esq = 0;
-		int dir = tam_array - 1;
-		bool found = false;
-		while(!found && esq <= dir){
-			int meio = (esq + dir) / 2;
-			if(strcmp(entry,(array + meio)->title) == 0){
-				compara++;
-				found = true;
-			}else if(strcmp(entry,(array + meio)->title) > 0){
-				compara += 2;
-				esq = meio + 1;
-			}else if(strcmp(entry,(array + meio)->title) < 0){
-				compara += 3;
-				dir = meio - 1;
-			}
-		}
-		if(found){
-			printf("SIM\n");
-		}else{
-			printf("NAO\n");
-		}
-		readLine(entry,255,stdin);
-	}
-	clock_t fim = clock();
-
-	double tempo_ms = ((double) (fim - inicio) / CLOCKS_PER_SEC) * 1000;
-	
-	FILE *info = fopen("./858190_binaria.txt","w");
-	fprintf(info,"858190\t%.6lf\t%d",tempo_ms,compara);
-	fclose(info);
-	
-	free(array);
-	free(entry);
 	for(int i = 0; i < 1368; i++)
 		freeShow(shows + i);
 	free(shows);

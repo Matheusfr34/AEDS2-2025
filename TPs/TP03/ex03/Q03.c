@@ -2,7 +2,6 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <stdbool.h>
-#include <time.h>
 
 typedef struct{
 	int date;
@@ -25,6 +24,7 @@ typedef struct{
 	char **listed_in;
 	size_t listedLen;
 }SHOW;
+
 
 SHOW clone(SHOW show){
 	SHOW clone;
@@ -79,21 +79,6 @@ SHOW clone(SHOW show){
 	}
 
 	return clone;
-}
-
-char* toLowerCase(char *w){
-	int len = strlen(w);
-	char *resp = (char *)calloc(len + 1,sizeof(char));
-
-	for(int i = 0; i < len; i++){
-		if(w[i] >= 'A' && w[i] <= 'Z'){
-			resp[i] = w[i] + 32;
-		}else{
-			resp[i] = w[i];
-		}
-	}
-
-	return resp;
 }
 
 int monthToInteger(char *w){
@@ -518,67 +503,46 @@ void freeShow(SHOW *i){
 	}
 }
 
-int datecmp(DATE atual, DATE prox){
-	int resp = 0;
+typedef struct{
+	SHOW *array;
+	int tam;
+}PILHA;
 
-	if(resp == 0 && atual.year != prox.year){
-		resp = (atual.year < prox.year) ? -1 : 1;
-	}
-	if(resp == 0 && atual.month != prox.month){
-		resp = (atual.month < prox.month) ? -1 : 1;
-	}
-	if(resp == 0 && atual.date != prox.date){
-		resp = (atual.date < prox.date) ? -1 : 1;
-	}
+PILHA* new_pilha(){
+	PILHA *tmp = (PILHA *)malloc(sizeof(PILHA));
+	tmp->array = (SHOW *)calloc(1368, sizeof(SHOW));
+	tmp->tam = 0;
 
-	return resp;
+	return tmp;
 }
 
-int verificaShow(SHOW a, SHOW b, int *mov, int *comp){
-	int resp = 0;
-	if(datecmp(a.date_added,b.date_added) != 0){
-		(*comp)++;
-		resp = datecmp(a.date_added,b.date_added);
-	}else{
-		(*comp)+=2;
-		char *aTitle = toLowerCase(a.title);
-		char *bTitle = toLowerCase(b.title);
-
-		resp = strcmp(aTitle,bTitle);
-
-		free(aTitle);
-		free(bTitle);
+void inserir(PILHA *pilha, SHOW show){
+	for(int i = pilha->tam; i > 0; i--){
+		pilha->array[i] = pilha->array[i - 1];
 	}
-	return resp;
+	pilha->array[0] = clone(show);
+	pilha->tam++;
 }
 
 
-void ordenaQuick(SHOW *array, int i, int j,int *mov, int *comp){
-	int esq = i, dir = j; 
-	SHOW pivo = array[(i + j) / 2];
-	while(i <= j){
-		while(verificaShow(array[i],  pivo,mov,comp) < 0){
-			i++;
-		}
-		while(verificaShow(array[j],pivo,mov,comp) > 0){
-			j--;
-		}
-		if(i <= j){
-			(*mov)++;
-			SHOW aux = array[i];
-			array[i] = array[j];
-			array[j] = aux;
-			i++;
-			j--;
-		}
+SHOW remover(PILHA *pilha){
+	SHOW tmp = pilha->array[0];
+	for(int i = 0; i < pilha->tam - 1; i++){
+		pilha->array[i] = pilha->array[i + 1];
 	}
-	if(esq < j){
-		ordenaQuick(array,esq, j,mov,comp);
-	}
-	if(dir > i){
-		ordenaQuick(array, i, dir, mov, comp);
+	pilha->tam--;
+	return tmp;
+}
+
+
+void mostrarRestante(PILHA *pilha){
+	int index = pilha->tam - 1;
+	for(int i = 0; i < pilha->tam; i++){
+		printf("[%d] ",index--);
+		imprimir(pilha->array+i);
 	}
 }
+
 int main(){
 	SHOW *shows = (SHOW *)calloc(1368,sizeof(SHOW));
 
@@ -596,39 +560,50 @@ int main(){
 	free(line);
 	fclose(file);
 
+	PILHA *pilha_shows = new_pilha();
+
 	char *entry = (char *)malloc(255 * sizeof(char));
 	scanf("%s",entry);
 
-	SHOW *array = (SHOW *)calloc(1368,sizeof(SHOW));
-	int tam_array = 0;
-
 	while(strcmp(entry,"FIM") != 0){
 		int id = atoi((entry + 1));
-		array[tam_array++] = clone(shows[--id]);
+		inserir(pilha_shows,  *(shows + (--id)));
 		scanf("%s",entry);
 	}
-
-	int mov= 0;
-	int comp= 0;
-	clock_t inicio = clock();
-	ordenaQuick(array,0,tam_array - 1, &mov,&comp);
-	clock_t fim = clock();
-	double duration = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-
-	FILE *log = fopen("./858190_quicksort.txt","w");
-	fprintf(log,"858190\t%d\t%d\t%.6f",comp,mov,duration * 1000);
-	fclose(log);
-
-	for(int i = 0; i < tam_array; i++){
-		imprimir(&array[i]);
-	}
 	
+	int ops;
+
+	scanf("%d",&ops);
+	getchar();
+
+	for(int i = 0; i < ops; i++){
+		char *line = (char *)malloc(255 * sizeof(char));
+
+		scanf("%s",line);
+		getchar();
+
+		if(strcmp(line,"I") == 0){
+
+			char *getId = (char *)malloc(255 * sizeof(char));
+			scanf("%s",getId);
+			getchar();
+			int id = atoi(getId + 1);
+			inserir(pilha_shows,*(shows + (--id)));
+
+		}else if(strcmp(line,"R") == 0){
+
+			SHOW getShow = remover(pilha_shows);
+			printf("(R) %s\n",getShow.title);
+
+		}
+
+		free(line);
+	}
+
+	mostrarRestante(pilha_shows);
 
 	for(int i = 0; i < 1368; i++)
 		freeShow(shows + i);
-	for(int i = 0; i < 1368; i++){
-		freeShow(array + i);
-	}
 	free(shows);
 
 	return 0;

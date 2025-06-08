@@ -1,13 +1,15 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
+
+import javax.swing.CellEditor;
 
 class Show{
     private String show_id;
@@ -304,82 +306,182 @@ class Show{
 
 class Celula{
     Show elemento;
-    Celula prox;
-
+    Celula prox,ant;
+    Celula(){
+        this.elemento = null;
+        this.prox = null;
+        this.ant = null; 
+    }
     Celula(Show elemento){
         this.elemento = elemento;
         this.prox = null;
+        this.ant = null;
     }
 }
 
-class Pilha{
-    Celula topo;
+class ListaDupla{
+    Celula primera;
+    Celula ultimo;
     int tam;
 
-    Pilha(){
-        this.topo = null;
+    ListaDupla(){
+        this.primera =new Celula();
+        this.ultimo = this.primera;
         this.tam = 0;
     }
 
-    public void inserir(Show x){
+    public void inserirInicio(Show x){
         Celula tmp = new Celula(x);
-        tmp.prox = this.topo;
-        this.topo = tmp;
+        
+        if(this.primera.prox == null){
+            tmp.ant=this.primera;
+            this.primera.prox = tmp;
+            this.ultimo = tmp;
+        }else{
+            tmp.prox = this.primera.prox;
+            tmp.ant = this.primera;
+            tmp.prox.ant = tmp;
+            this.primera.prox = tmp; 
+        }
+
         this.tam++;
     }
 
-    public Show remover(){
-        Show resp = this.topo.elemento;
-        this.topo = this.topo.prox;
+    public void inserirFim(Show x){
+        Celula tmp = new Celula(x);
+        tmp.ant = this.ultimo;
+
+        this.ultimo.prox =tmp;
+        this.ultimo = tmp;
+        this.tam++;
+    }
+
+    public void inserir(Show x,int pos){
+        Celula i =  this.primera;
+
+        for(int j =0;j < pos && i.prox !=null; j++){
+            i = i.prox;
+        }
+        if(i.prox == null){
+            inserirFim(x);
+        }else{
+            Celula tmp = new Celula(x);
+            tmp.prox = i.prox;
+            tmp.ant = i;
+            tmp.prox.ant = tmp;
+            i.prox = tmp;
+        }
+        this.tam++;
+    }
+
+    public Show removerInicio(){
+        Celula i =  this.primera.prox;
+        this.primera.prox = i.prox;
+        i.prox.ant =this.primera;
+
+        Show resp = i.elemento;
+        this.tam--;
+        return resp;
+    }
+
+    public Show removerFim(){
+        Celula i =  this.ultimo;
+        this.ultimo = i.ant;
+        this.ultimo.prox = null;
+
+        Show resp = i.elemento;
+        this.tam--;
+        return resp;
+    }
+
+    public Show remover(int pos){
+        Celula i = this.primera;
+        for(int j =0;j < pos && i.prox !=null; j++){
+            i = i.prox;
+        }
+
+        Celula tmp = i.prox;
+        Show resp;
+        if(tmp.prox == null){
+            resp = removerFim();
+        }else{
+            resp =tmp.elemento;
+            i.prox = tmp.prox;
+            tmp.prox.ant = i;
+        }
         this.tam--;
         return resp;
     }
 
     public void mostrar(){
-        int tam = this.tam - 1;
 
-        for(Celula i = this.topo;i!=null;i=i.prox,tam--){
-            System.out.printf("[%d] ",tam);
+        for(Celula i = this.primera.prox;i!=null;i=i.prox){
             i.elemento.imprimir();
         }
 
     }
 
+    public void ordenarListaQuickSort(){
+        quickSortRecursivo(primera.prox,ultimo);
+    }
+
+    private static void quickSortRecursivo(Celula inicio, Celula fim){
+        if(fim!=null && inicio != fim && inicio != fim.prox){
+            Celula pivo = particionar(inicio,fim);
+            quickSortRecursivo(inicio, pivo.ant);
+            quickSortRecursivo(pivo.prox, fim);
+        }
+    }
+
+    private static int compararNos(Celula a, Celula b) {
+        
+        int cmpData = a.elemento.getDate_added().compareTo(b.elemento.getDate_added());
+        if (cmpData != 0) {
+            return cmpData;
+        }
+        
+        return a.elemento.getTitle().toLowerCase().compareTo(b.elemento.getTitle().toLowerCase());
+    }
+
+    private static Celula particionar(Celula inicio, Celula fim) {
+        Celula pivo = fim;
+        Celula i = inicio.ant;
+        
+        for (Celula j = inicio; j != fim; j = j.prox) {
+            if (compararNos(j, pivo) <= 0) {
+                i = (i == null) ? inicio : i.prox;
+                trocarNos(i, j);  
+            }
+        }
+        
+        i = (i == null) ? inicio : i.prox;
+        trocarNos(i, fim);  
+        return i;
+    }
+
+    private static void trocarNos(Celula a, Celula b){
+        Show temp = a.elemento;
+        a.elemento = b.elemento;
+        b.elemento = temp;
+    }
 
 }
 
-public class Q09{
-
+public class Q10{
     static Show[] show = new Show[1368];
 
     public static void main(String[] args) throws IOException, ParseException {
         Scanner sc = new Scanner(System.in);
         Show.leiaShow(show);
         String linha = sc.nextLine();
-        Pilha pilha = new Pilha();
+        ListaDupla lista = new ListaDupla();
         while (!linha.equals("FIM")) {
             int index = Integer.parseInt(linha.substring(1))-1;
-            pilha.inserir(show[index]);
+            lista.inserirFim(show[index]);
             linha = sc.nextLine();
         }
-
-        linha = sc.nextLine();
-
-        int num = Integer.parseInt(linha);
-        for(int i =0; i < num;i++){
-            linha = sc.nextLine();
-            String[] splitado = linha.split(" ");
-
-            if(splitado[0].equals("I")){
-                int index = Integer.parseInt(splitado[1].substring(1))-1;
-                pilha.inserir(show[index]);
-            }else if(splitado[0].equals("R")){
-                Show resp = pilha.remover();
-                System.out.println("(R) " + resp.getTitle());
-            }
-        }
-
-        pilha.mostrar();
+        lista.ordenarListaQuickSort();
+        lista.mostrar();
     }
 
 }

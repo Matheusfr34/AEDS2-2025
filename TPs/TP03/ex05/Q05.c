@@ -501,60 +501,125 @@ CELULA* new_celula_e(SHOW show){
 }
 
 typedef struct{
-	CELULA *topo;
-}PILHA;
+	CELULA *primeiro;
+	CELULA *ultimo;
+}LISTA;
 
-PILHA* new_pilha(){
-	PILHA *tmp = (PILHA *)malloc(sizeof(PILHA));
-	tmp->topo = new_celula();
+LISTA* new_lista(){
+	LISTA *tmp = (LISTA *)malloc(sizeof(LISTA));
+	tmp->primeiro = new_celula();
+	tmp->ultimo = tmp->primeiro;
 	return tmp;
 }
 
-int tamanho(PILHA *pilha){
+int tamanho(LISTA *lista){
 	int tam = 0;
 	CELULA *i;
-	for(i = pilha->topo->prox; i != NULL; i = i->prox, tam++);
+	for(i = lista->primeiro; i != lista->ultimo; i = i->prox, tam++);
 	return tam;
 }
 
-void inserir(PILHA *pilha, SHOW show){
+void inserirInicio(LISTA *lista, SHOW show){
 	CELULA *tmp = new_celula_e(show);
-	tmp->prox = pilha->topo->prox;
-	pilha->topo->prox = tmp;
+	tmp->prox = lista->primeiro->prox;
+	lista->primeiro->prox = tmp;
 	tmp = NULL;
 }
 
+void inserirFim(LISTA *lista, SHOW show){
+	CELULA *tmp = new_celula_e(show);
+	lista->ultimo->prox = tmp;
+	lista->ultimo = tmp;
+	tmp = NULL;
+}
 
-SHOW remover(PILHA *pilha){
-	SHOW resp;
-
-	if(pilha->topo->prox == NULL){
-		errx(1,"Erro ao remover\n");
+void inserir(LISTA *lista, int pos, SHOW show){
+	int tam = tamanho(lista);
+	if(pos < 0 || pos > tam){
+		errx(1,"Erro ao tentar inserir na posicao %d, tamanho da lista = %d\n",pos,tam);
+	}else if(pos == 0){
+		inserirInicio(lista,show);
+	}else if(pos == tam){
+		inserirFim(lista, show);
 	}else{
-		CELULA *tmp = pilha->topo->prox;
-		pilha->topo->prox = pilha->topo->prox->prox;
+		int j;
+		CELULA *i = lista->primeiro;
+		for(j = 0; j < pos; j++, i = i->prox);
+		
+		CELULA *tmp = new_celula_e(show);
+		tmp->prox = i->prox;
+		i->prox = tmp;
+		tmp = i = NULL;
+	}
+}
+
+SHOW removerInicio(LISTA *lista){
+	if(lista->primeiro == lista->ultimo){
+		errx(1,"Erro ao remover\n");
+	}
+	CELULA *tmp = lista->primeiro->prox;
+	SHOW resp = clone(*lista->primeiro->prox->elemento);
+	lista->primeiro->prox = lista->primeiro->prox->prox;
+	tmp->prox = NULL;
+	free(tmp);
+	tmp = NULL;
+	return resp;
+}
+
+SHOW removerFim(LISTA *lista){
+	if(lista->primeiro == lista->ultimo){
+		errx(1,"Erro ao remover\n");
+	}
+	CELULA *i;
+	for(i = lista->primeiro; i->prox != lista->ultimo; i = i->prox);
+	CELULA *tmp = lista->ultimo;
+	SHOW resp = clone(*tmp->elemento);
+	lista->ultimo = i;
+	i->prox = NULL;
+	free(tmp);
+	i = tmp = NULL;
+	return resp;
+}
+
+SHOW remover(LISTA *lista, int pos){
+	SHOW resp;
+	if(lista->primeiro == lista->ultimo){
+		errx(1,"Erro ao remover\n");
+	}
+	int tam = tamanho(lista);
+	if(pos < 0 || pos > tam){
+		errx(1,"Erro ao remover! %d não pode ser removido do tamanho %d\n",pos,tam);
+	}else if(pos == 0){
+		resp = removerInicio(lista);
+	}else if(pos == tam){
+		resp = removerFim(lista);
+	}else{
+		CELULA *tmp;
+		CELULA *i = lista->primeiro->prox;
+		for(int j = 0; j < pos - 1; j++, i = i->prox);
+		tmp = i->prox;
+		i->prox = i->prox->prox;
+		resp = clone(*tmp->elemento);
 		tmp->prox = NULL;
-		resp = clone(*(tmp->elemento));
 		free(tmp);
+		i = tmp = NULL;
 	}
 
 	return resp;
 }
 
-void mostrarRestante(PILHA *pilha){
-	CELULA *i = pilha->topo->prox;
-	int tam = tamanho(pilha);
-	for(int j = tam - 1; j >= 0; j--, i = i->prox){
-		printf("[%d] ",j);
+void mostrarRestante(LISTA *lista){
+	CELULA *i;
+	for(i = lista->primeiro->prox;i != NULL; i = i->prox){
 		imprimir(i->elemento);
 	}
 }
 
 void leArquivo(SHOW*);
-void preenchePilhaInicialmente(PILHA*,SHOW*);
+void preencheListaInicialmente(LISTA*,SHOW*);
 int getShowId();
 int getPosition();
-void executaOperacao(char*, PILHA*, SHOW*);
+void executaOperacao(char*, LISTA*, SHOW*);
 
 
 int main(){
@@ -562,9 +627,9 @@ int main(){
 
 	leArquivo(shows);
 	
-	PILHA *pilha_shows = new_pilha();
+	LISTA *lista_shows = new_lista();
 
-	preenchePilhaInicialmente(pilha_shows,shows);
+	preencheListaInicialmente(lista_shows,shows);
 	
 	int quantidadeOperacoes;
 
@@ -577,12 +642,12 @@ int main(){
 		scanf("%s",op);
 		getchar();
 
-		executaOperacao(op,pilha_shows,shows);
+		executaOperacao(op,lista_shows,shows);
 
 		free(op);
 	}
 
-	mostrarRestante(pilha_shows);
+	mostrarRestante(lista_shows);
 
 	for(int i = 0; i < 1368; i++)
 		freeShow(shows + i);
@@ -609,13 +674,13 @@ void leArquivo(SHOW *shows){
 	fclose(file);
 }
 
-void preenchePilhaInicialmente(PILHA *pilha,SHOW *shows){
+void preencheListaInicialmente(LISTA *lista,SHOW *shows){
 	char *entry = (char *)malloc(255 * sizeof(char));
 	scanf("%s",entry);
 
 	while(strcmp(entry,"FIM") != 0){
 		int id = atoi((entry + 1));
-		inserir(pilha,  shows[--id]);
+		inserirFim(lista,  *(shows + (--id)));
 		scanf("%s",entry);
 	}
 }
@@ -640,16 +705,37 @@ int getPosition(){
 	return resp;
 }
 
-void executaOperacao(char *op, PILHA *pilha_shows, SHOW *shows){
-	if(strcmp(op,"I") == 0){
+void executaOperacao(char *op, LISTA *lista_shows, SHOW *shows){
+	if(strcmp(op,"II") == 0){
 
 		int id = getShowId();
-		inserir(pilha_shows,shows[--id]);
+		inserirInicio(lista_shows,shows[--id]);
 
-	} else if(strcmp(op,"R") == 0){
+	} else if(strcmp(op,"IF") == 0){
 
-		SHOW removedShow = remover(pilha_shows);
-		printf("(R) %s\n",removedShow.title);
+		int id = getShowId();
+		inserirFim(lista_shows,shows[--id]);
 
+	} else if(strcmp(op,"I*") == 0){
+
+		int pos = getPosition();
+		int id = getShowId();
+		inserir(lista_shows,pos,shows[--id]);
+
+	}else if(strcmp(op,"RI") == 0){
+
+		SHOW getShow = removerInicio(lista_shows);
+		printf("(R) %s\n",getShow.title);
+
+	}else if(strcmp(op,"RF") == 0){
+
+		SHOW getShow = removerFim(lista_shows);
+		printf("(R) %s\n",getShow.title);
+
+	} else if(strcmp(op,"R*") == 0){
+
+		int pos = getPosition();
+		SHOW getShow = remover(lista_shows, pos);
+		printf("(R) %s\n",getShow.title);
 	}
 }

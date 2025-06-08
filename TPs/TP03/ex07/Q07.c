@@ -501,38 +501,56 @@ CELULA* new_celula_e(SHOW show){
 }
 
 typedef struct{
-	CELULA *topo;
-}PILHA;
+	CELULA *primeiro;
+	CELULA *ultimo;
+}FILA;
 
-PILHA* new_pilha(){
-	PILHA *tmp = (PILHA *)malloc(sizeof(PILHA));
-	tmp->topo = new_celula();
+FILA* new_fila(){
+	FILA *tmp = (FILA *)malloc(sizeof(FILA));
+	tmp->primeiro = new_celula();
+	tmp->ultimo = tmp->primeiro;
 	return tmp;
 }
 
-int tamanho(PILHA *pilha){
+int tamanho(FILA *fila){
 	int tam = 0;
 	CELULA *i;
-	for(i = pilha->topo->prox; i != NULL; i = i->prox, tam++);
+	for(i = fila->primeiro; i != fila->ultimo; i = i->prox, tam++);
 	return tam;
 }
 
-void inserir(PILHA *pilha, SHOW show){
-	CELULA *tmp = new_celula_e(show);
-	tmp->prox = pilha->topo->prox;
-	pilha->topo->prox = tmp;
-	tmp = NULL;
+SHOW remover(FILA*);
+int mediaFila(FILA*);
+
+void inserir(FILA *fila, SHOW show){
+	int tam = tamanho(fila);
+	if(tam == 5){
+		remover(fila);
+		CELULA *tmp = new_celula_e(show);
+		fila->ultimo->prox = tmp;
+		fila->ultimo = tmp;
+		fila->ultimo->prox = fila->primeiro->prox;
+		tmp = NULL;
+	}else{
+		CELULA *tmp = new_celula_e(show);
+		fila->ultimo->prox = tmp;
+		fila->ultimo = tmp;
+		fila->ultimo->prox = fila->primeiro->prox;
+		tmp = NULL;
+	}
+	printf("[Media] %d\n",mediaFila(fila));
 }
 
 
-SHOW remover(PILHA *pilha){
+SHOW remover(FILA *fila){
 	SHOW resp;
 
-	if(pilha->topo->prox == NULL){
+	if(fila->primeiro == fila->ultimo){
 		errx(1,"Erro ao remover\n");
 	}else{
-		CELULA *tmp = pilha->topo->prox;
-		pilha->topo->prox = pilha->topo->prox->prox;
+		CELULA *tmp = fila->primeiro->prox;
+		fila->primeiro->prox = fila->primeiro->prox->prox;
+		fila->ultimo->prox = fila->primeiro->prox->prox;
 		tmp->prox = NULL;
 		resp = clone(*(tmp->elemento));
 		free(tmp);
@@ -541,9 +559,20 @@ SHOW remover(PILHA *pilha){
 	return resp;
 }
 
-void mostrarRestante(PILHA *pilha){
-	CELULA *i = pilha->topo->prox;
-	int tam = tamanho(pilha);
+int mediaFila(FILA *fila){
+	int resp = 0;
+	int tam = tamanho(fila);
+
+	CELULA *i = fila->primeiro->prox;
+
+	for(int j = tam; j > 0;j--, resp += i->elemento->release_year, i = i->prox );
+
+	return resp / tam;
+}
+
+void mostrarRestante(FILA *fila){
+	CELULA *i = fila->primeiro->prox;
+	int tam = tamanho(fila);
 	for(int j = tam - 1; j >= 0; j--, i = i->prox){
 		printf("[%d] ",j);
 		imprimir(i->elemento);
@@ -551,10 +580,10 @@ void mostrarRestante(PILHA *pilha){
 }
 
 void leArquivo(SHOW*);
-void preenchePilhaInicialmente(PILHA*,SHOW*);
+void preencheFilaInicialmente(FILA*,SHOW*);
 int getShowId();
 int getPosition();
-void executaOperacao(char*, PILHA*, SHOW*);
+void executaOperacao(char*, FILA*, SHOW*);
 
 
 int main(){
@@ -562,9 +591,9 @@ int main(){
 
 	leArquivo(shows);
 	
-	PILHA *pilha_shows = new_pilha();
+	FILA *fila_shows = new_fila();
 
-	preenchePilhaInicialmente(pilha_shows,shows);
+	preencheFilaInicialmente(fila_shows,shows);
 	
 	int quantidadeOperacoes;
 
@@ -577,12 +606,12 @@ int main(){
 		scanf("%s",op);
 		getchar();
 
-		executaOperacao(op,pilha_shows,shows);
+		executaOperacao(op,fila_shows,shows);
 
 		free(op);
 	}
 
-	mostrarRestante(pilha_shows);
+	mostrarRestante(fila_shows);
 
 	for(int i = 0; i < 1368; i++)
 		freeShow(shows + i);
@@ -609,13 +638,13 @@ void leArquivo(SHOW *shows){
 	fclose(file);
 }
 
-void preenchePilhaInicialmente(PILHA *pilha,SHOW *shows){
+void preencheFilaInicialmente(FILA *fila,SHOW *shows){
 	char *entry = (char *)malloc(255 * sizeof(char));
 	scanf("%s",entry);
 
 	while(strcmp(entry,"FIM") != 0){
 		int id = atoi((entry + 1));
-		inserir(pilha,  shows[--id]);
+		inserir(fila,  shows[--id]);
 		scanf("%s",entry);
 	}
 }
@@ -640,15 +669,15 @@ int getPosition(){
 	return resp;
 }
 
-void executaOperacao(char *op, PILHA *pilha_shows, SHOW *shows){
+void executaOperacao(char *op, FILA *fila_shows, SHOW *shows){
 	if(strcmp(op,"I") == 0){
 
 		int id = getShowId();
-		inserir(pilha_shows,shows[--id]);
+		inserir(fila_shows,shows[--id]);
 
 	} else if(strcmp(op,"R") == 0){
 
-		SHOW removedShow = remover(pilha_shows);
+		SHOW removedShow = remover(fila_shows);
 		printf("(R) %s\n",removedShow.title);
 
 	}
