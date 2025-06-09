@@ -1,3 +1,4 @@
+
 class No {
     int elemento;
     No esq, dir;
@@ -17,7 +18,6 @@ class No {
 
 class Arvore {
     No raiz;
-
     public Arvore() {
         raiz = null;
     }
