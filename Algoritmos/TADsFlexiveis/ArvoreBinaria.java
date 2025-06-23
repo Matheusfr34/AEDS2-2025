@@ -188,7 +188,7 @@ class Arvore {
         }
         return getMenorRecursivo(i.esq);
     }
-
+    
     // Método para remover um elemento da árvore
     void remover(int x) {
         if (raiz == null) {

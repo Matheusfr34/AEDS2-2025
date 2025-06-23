@@ -1,4 +1,3 @@
-package Prática;
 import java.util.Scanner;
 class Medalhas {
     String nome;

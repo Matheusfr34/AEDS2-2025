@@ -1,4 +1,7 @@
+//Questão prova prática 2 - Classe Jogadores
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class Date {
@@ -16,7 +19,7 @@ class Jogadores {
 
     public void imprimir() {
         System.out.print(this.id + " " + this.nome + " " + this.nascimento.dia + "/" +
-                this.nascimento.mes + "/" + this.nascimento.ano + " " + this.foto + " (");
+                this.nascimento.mes + "/" + this.nascimento.ano + " " + this.foto + " " + "(");
         for (int i = 0; i < times.length - 1; i++) {
             System.out.print(times[i] + ", ");
         }
@@ -49,20 +52,20 @@ class Jogadores {
         this.times = new int[n];
         for (int j = 0; j < n - 1; j++) {
             String timeString = separar(input, i, ',');
-            this.times[j] = Integer.parseInt(timeString.trim());
+            this.times[j] = Integer.parseInt(timeString);
             i += timeString.length() + 2;
         }
         String timeString = separar(input, i, ']');
-        this.times[n - 1] = Integer.parseInt(timeString.trim());
+        this.times[n - 1] = Integer.parseInt(timeString);
     }
 
     public String separar(String input, int i, char delimiter) {
-        StringBuilder sb = new StringBuilder();
+        String stringer = "";
         while (i < input.length() && input.charAt(i) != delimiter) {
-            sb.append(input.charAt(i));
+            stringer += input.charAt(i);
             i++;
         }
-        return sb.toString();
+        return stringer;
     }
 
     public int contarTimes(String input, int i) {
@@ -77,32 +80,49 @@ class Jogadores {
     }
 }
 
-public class Main {
+public class PesquisaBinaria {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        ArrayList<Jogadores> jogadores = new ArrayList<>();
+        List<Jogadores> jogadores = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
 
+        // Ler jogadores até encontrar "FIM"
         while (true) {
-            String linha = sc.nextLine();
-            if (linha.equals("FIM")) break;
-
-            Jogadores j = new Jogadores();
-            j.ler(linha);
-            jogadores.add(j);
-        }
-
-        for (int i = 1; i < jogadores.size(); i++) {
-            Jogadores atual = jogadores.get(i);
-            int j = i - 1;
-            while (j >= 0 && jogadores.get(j).id > atual.id) {
-                jogadores.set(j + 1, jogadores.get(j));
-                j--;
+            String linha = scanner.nextLine();
+            if (linha.equals("FIM")) {
+                break;
             }
-            jogadores.set(j + 1, atual);
+            Jogadores jogador = new Jogadores();
+            jogador.ler(linha);
+            jogadores.add(jogador);
         }
 
-        for (Jogadores j : jogadores) {
-            j.imprimir();
+        // Ler nomes para busca até encontrar "FIM"
+        while (true) {
+            String nome = scanner.nextLine();
+            if (nome.equals("FIM")) {
+                break;
+            }
+            boolean encontrado = buscaBinaria(jogadores, nome);
+            System.out.println(encontrado ? "SIM" : "NAO");
         }
+    }
+
+    public static boolean buscaBinaria(List<Jogadores> jogadores, String nome) {
+        int esquerda = 0;
+        int direita = jogadores.size() - 1;
+
+        while (esquerda <= direita) {
+            int meio = (esquerda + direita) / 2;
+            int comparacao = jogadores.get(meio).nome.compareTo(nome);
+
+            if (comparacao == 0) {
+                return true;
+            } else if (comparacao < 0) {
+                esquerda = meio + 1;
+            } else {
+                direita = meio - 1;
+            }
+        }
+        return false;
     }
 }
