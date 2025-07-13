@@ -1,5 +1,5 @@
 # 💻 AEDS II
-Repositório criado para auxiliar na disciplina de Algoritmos e Estrutura de Dados II, na Pontifícia Universidade Católica de Minas Gerais.
+Repositório criado para auxiliar na disciplina de Algoritmos e Estrutura de Dados II, na Pontifícia Universidade Católica de Minas Gerais. A disciplina foi cursada em 2025.1, com o professor Daniel Capanema. 
 
 ## 💡 Algoritmos
 Pasta com os algoritmos ensinados em sala de aula.
