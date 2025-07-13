@@ -43,7 +43,7 @@ Pasta com a resolução e enunciados dos Trabalhos Práticos (TPs).
    ./programa
    
 ### ✅ Rodar códigos em Java pelo terminal
-1. Abra o terminal e vá até a pasta onde está o arquivo **.java**:
+1. Abra o terminal e vá até a pasta onde está o arquivo `.java`:
    Exemplo:
    ```bash
    cd Algoritmos/Pesquisa
