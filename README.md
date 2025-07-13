@@ -30,6 +30,7 @@ Pasta com a resolução e enunciados dos Trabalhos Práticos (TPs).
 ### ✅ Rodar códigos em **C** pelo terminal
 
 1. Abra o terminal e navegue até a pasta onde está o arquivo `.c`.
+   
    Exemplo:
    ```bash
    cd Algortimos/Pesquisa
@@ -43,12 +44,13 @@ Pasta com a resolução e enunciados dos Trabalhos Práticos (TPs).
    ./programa
    
 ### ✅ Rodar códigos em Java pelo terminal
-1. Abra o terminal e vá até a pasta onde está o arquivo `.java`:
+1. Abra o terminal e vá até a pasta onde está o arquivo `.java`.
+   
    Exemplo:
    ```bash
    cd Algoritmos/Pesquisa
    
-2. Compile o código com o javac:
+3. Compile o código com o javac:
    ```bash
    javac NomeDoArquivo.java
 4. Execute o programa:
