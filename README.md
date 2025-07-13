@@ -5,7 +5,7 @@ Repositório criado para auxiliar na disciplina de Algoritmos e Estrutura de Dad
 Pasta com os algoritmos ensinados em sala de aula.
 
 ## 🏋️ BeeCrowd
-Pasta com exercícios solucionados da plataforma competitiva para se preparar para a prova prática.  
+Pasta com exercícios solucionados da plataforma BeeCrowd para se preparar para a prova prática.  
 Plataforma → [BeeCrowd](https://judge.beecrowd.com/pt)
 
 ## ⚙️ Lab
