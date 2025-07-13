@@ -1,31 +1,25 @@
 # 💻 AEDS II
 Repositório criado para auxiliar na disciplina de Algoritmos e Estrutura de Dados II, na Pontíficia Universidade Católica de Minas Gerais.
 
-## ❓ Ajuda
-[Guia com os principais comandos](fonte/ajuda/README.md)
+## 💡Algoritmos
+Pasta com os algoritmos ensinados em sala de aula.
 
+## 🏋️ BeeCrowd
+Pasta com exercícios solucionados da plataforma competitiva para se preparar para a prova prática.  
+Platadorma -> [BeeCrowd](https://judge.beecrowd.com/pt)
 
-## 👨‍⚕️ Slides
-[Pasta com powerpoints usados em aula](aulas)
+## ⚙️ Lab
+Pasta com os exercícios de treinamento do laboratório.
 
+## 📘 Oficina
+Pasta com os exercícios de treinamento passados na oficina de Programação Competitiva utilizando a plataforma LeetCode.
 
-## 📁 Bibliotecas
-[Pasta com as bibliotecas usadas na disciplina](fonte/ajuda/java)
+## 📚 Prova Prática
+Pasta com a resolução de questões que caíram na prova prática no semestre 2025.1
 
-
-## 💡 Códigos
-[Pasta com os algoritmos de exemplo](fonte)
-
-
-## ⚙️ Labs
-[Pasta com os exercícios de treinamento do laboratório](labs)
-
+## 📝 Quizzes
+Pasta com os quizzes passados na disciplina. 
 
 ## 🔥 TPS
-[Pasta com os trabalhos práticos do laboratório](tps)
+Pasta com a resolução e enunciados dos trabalhos práticos (TPs).
 
-
-## 🏋️ Prática
-[OBI](https://olimpiada.ic.unicamp.br/pratique/pu/)</br>
-[CodeWars](https://www.codewars.com/dashboard)</br>
-[HackerRank](https://www.hackerrank.com/dashboard)
